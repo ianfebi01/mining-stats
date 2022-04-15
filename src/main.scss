@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap');
+
+// Set your brand colors
+$black: #020206;
+$grey: #737372;
+$bg-light: #f2f3f9;
+
+// Update Bulma's global variables
+$family-sans-serif: 'Quicksand', sans-serif;
+$primary: $black;
+$grey-light: $grey;
+$light: $bg-light;
+$body-background-color: $light;
+
+.nav-height {
+  height: 92px;
+}
+
+.round-corner {
+  border-radius: 20px;
+}
+.overview {
+  height: 291px;
+}
+.overview .hero-overview {
+  height: 189px;
+}
+.overview .hero-overview .income {
+  height: 150px;
+  -webkit-box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
+  box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
+}
+// $grey-dark: $brown;
+// $grey-light: $beige-light;
+// $primary: $purple;
+// $link: $pink;
+// $widescreen-enabled: false;
+// $fullhd-enabled: false;
+// Update some of Bulma's component variables
+// $body-background-color: $beige-lighter;
+// $control-border-width: 2px;
+// $input-border-color: transparent;
+// $input-shadow: none;
+@import '../node_modules/bulma/bulma.sass';
