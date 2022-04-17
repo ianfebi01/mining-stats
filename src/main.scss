@@ -14,6 +14,7 @@ $primary: $black;
 $grey-light: $grey;
 $light: $bg-light;
 $body-background-color: $light;
+$box-padding: 2px;
 
 .nav-height {
   height: 92px;
@@ -32,6 +33,24 @@ $body-background-color: $light;
   height: 150px;
   -webkit-box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
   box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
+}
+.overview .hero-overview .cost {
+  height: 150px;
+}
+.overview .hero-overview .box-percentage {
+  padding: 2px;
+  border-radius: 5px;
+  background-color: #ecfff4;
+  text-align: right;
+  color: #40ec88;
+}
+
+.next-prev {
+  height: 168px;
+}
+
+.statistics {
+  height: 291px;
 }
 // $grey-dark: $brown;
 // $grey-light: $beige-light;
