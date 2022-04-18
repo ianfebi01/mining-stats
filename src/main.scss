@@ -41,16 +41,49 @@ $box-padding: 2px;
   padding: 2px;
   border-radius: 5px;
   background-color: #ecfff4;
-  text-align: right;
+  text-align: center;
   color: #40ec88;
 }
 
+.overview .hero-overview .cost .box-percentage {
+  padding: 2px;
+  border-radius: 5px;
+  background-color: white;
+  text-align: center;
+  color: $primary;
+}
+
 .next-prev {
-  height: 168px;
+  height: 150px;
+}
+
+.next-prev .box-percentage {
+  padding: 2px;
+  border-radius: 5px;
+  background-color: #ecfff4;
+  text-align: center;
+  color: #40ec88;
+}
+.next-prev .arrow {
+  text-align: center;
+  padding: 0;
 }
 
 .statistics {
   height: 291px;
+}
+
+.title-underline {
+  border-bottom: 1px solid #e4e4e4;
+}
+.email {
+  display: flex;
+  margin: auto;
+  align-items: center;
+}
+.email-text {
+  font-size: 8px;
+  margin-left: 5px;
 }
 // $grey-dark: $brown;
 // $grey-light: $beige-light;
