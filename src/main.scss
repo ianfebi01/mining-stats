@@ -15,6 +15,7 @@ $grey-light: $grey;
 $light: $bg-light;
 $body-background-color: $light;
 $box-padding: 2px;
+$table-cell-padding: 2px;
 
 .nav-height {
   height: 92px;
@@ -23,29 +24,26 @@ $box-padding: 2px;
 .round-corner {
   border-radius: 20px;
 }
+
 .overview {
-  height: 291px;
+  min-height: 291px;
 }
-.overview .hero-overview {
-  height: 189px;
-}
-.overview .hero-overview .income {
+.income {
   height: 150px;
   -webkit-box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
   box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
 }
-.overview .hero-overview .cost {
+.cost {
   height: 150px;
 }
-.overview .hero-overview .box-percentage {
+.box-percentage {
   padding: 2px;
   border-radius: 5px;
   background-color: #ecfff4;
   text-align: center;
   color: #40ec88;
 }
-
-.overview .hero-overview .cost .box-percentage {
+.cost .box-percentage {
   padding: 2px;
   border-radius: 5px;
   background-color: white;
@@ -54,7 +52,7 @@ $box-padding: 2px;
 }
 
 .next-prev {
-  height: 150px;
+  min-height: 126px;
 }
 
 .next-prev .box-percentage {
@@ -85,6 +83,20 @@ $box-padding: 2px;
   font-size: 8px;
   margin-left: 5px;
 }
+.detail-cost {
+  min-height: 126px;
+}
+.box-table {
+  max-height: 70px;
+  overflow: scroll;
+}
+.table .is-borderless {
+  border: 0;
+}
+.about {
+  min-height: 126px;
+}
+
 // $grey-dark: $brown;
 // $grey-light: $beige-light;
 // $primary: $purple;

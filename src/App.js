@@ -62,79 +62,63 @@ function App() {
         </section>
         {/* Body */}
         <div className="columns">
-          <div className="column is-7 ">
+          <div className="column is-7">
             {/* Overview */}
             <div className="columns">
               <div className="column">
-                <section className="hero overview round-corner has-background-white ">
+                <section className="hero is-medium round-corner has-background-white overview">
                   <div className="hero-body py-4 px-5 ">
                     <h1 className="title has-text-primary">Overview</h1>
-                    <section className="hero hero-overview round-corner has-background-light">
+                    <section className="hero round-corner has-background-light mb-4">
                       <div className="hero-body py-4 px-5">
                         <div className="columns">
                           <div className="column is-6">
-                            <section className="hero income round-corner has-background-white">
+                            <section className="hero round-corner has-background-white">
                               <div className="hero-body px-4 py-5">
-                                <div className="columns">
-                                  <div className="column is-9 py-1">
+                                <ul className="is-flex">
+                                  <li>
                                     <h1 className="is-size-6 has-text-primary">
                                       March Income
                                     </h1>
-                                  </div>
-                                  <div className="column is-3 py-1">
+                                  </li>
+                                  <li className="mr-1 ml-auto">
                                     <div className="box-percentage is-size-7">
                                       <FontAwesomeIcon icon={faArrowUp} />
                                       7.5%
                                     </div>
-                                  </div>
-                                </div>
-                                <div className="columns">
-                                  <div className="column py-1">
-                                    <h1 className="title is-size-2 has-text-primary">
-                                      0.034768
-                                    </h1>
-                                  </div>
-                                </div>
-                                <div className="columns">
-                                  <div className="column py-1">
-                                    <h1 className="title is-size-5 has-text-primary">
-                                      ETH
-                                    </h1>
-                                  </div>
-                                </div>
+                                  </li>
+                                </ul>
+                                <h1 className="title is-size-2 has-text-primary my-2">
+                                  0.034768
+                                </h1>
+                                <h1 className="title is-size-5 has-text-primary">
+                                  ETH
+                                </h1>
                               </div>
                             </section>
                           </div>
                           <div className="column is-6">
                             <section className="hero cost round-corner">
                               <div className="hero-body px-4 py-5">
-                                <div className="columns">
-                                  <div className="column is-9 py-1">
+                                <ul className="is-flex">
+                                  <li>
                                     <h1 className="is-size-6 has-text-primary">
                                       March Income
                                     </h1>
-                                  </div>
-                                  <div className="column is-3 py-1">
+                                  </li>
+                                  <li className="mr-1 ml-auto">
                                     <div className="box-percentage is-size-7">
                                       {/* <FontAwesomeIcon icon={faArrowUp} /> */}
                                       7.5%
                                     </div>
-                                  </div>
-                                </div>
-                                <div className="columns">
-                                  <div className="column py-1">
-                                    <h1 className="title is-size-2 has-text-primary">
-                                      0.034768
-                                    </h1>
-                                  </div>
-                                </div>
-                                <div className="columns">
-                                  <div className="column py-1">
-                                    <h1 className="title is-size-5 has-text-primary">
-                                      ETH
-                                    </h1>
-                                  </div>
-                                </div>
+                                  </li>
+                                </ul>
+                                <h1 className="title is-size-2 has-text-primary my-2">
+                                  0.034768
+                                </h1>
+                                <h1 className="title is-size-5 has-text-primary">
+                                  ETH
+                                </h1>
                               </div>
                             </section>
                           </div>
@@ -148,35 +132,25 @@ function App() {
             {/* Next-Prev */}
             <div className="columns">
               <div className="column is-5">
-                <section className="hero next-prev round-corner has-background-white">
+                <section className="hero round-corner has-background-white next-prev">
                   <div className="hero-body py-4 px-5">
-                    <div className="columns">
-                      <div className="column is-8 py-3">
+                    <ul className="is-flex">
+                      <li>
                         <h1 className="is-size-6 has-text-primary">
                           March Income
                         </h1>
-                      </div>
-                      <div className="column is-4 py-3">
+                      </li>
+                      <li className="mr-1 ml-auto">
                         <div className="box-percentage is-size-7">
                           <FontAwesomeIcon icon={faArrowUp} />
                           7.5%
                         </div>
-                      </div>
-                    </div>
-                    <div className="columns">
-                      <div className="column pt-0">
-                        <h1 className="title is-size-2 has-text-primary">
-                          0.034768
-                        </h1>
-                      </div>
-                    </div>
-                    <div className="columns">
-                      <div className="column py-1">
-                        <h1 className="title is-size-5 has-text-primary">
-                          ETH
-                        </h1>
-                      </div>
-                    </div>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      0.034768
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
                 </section>
               </div>
@@ -186,14 +160,14 @@ function App() {
                     <ul className="arrow has-text-primary">
                       <li>
                         <FontAwesomeIcon
-                          className="is-size-2"
+                          className="is-size-4"
                           icon={faArrowLeft}
                         />
                       </li>
                       <li>Next</li>
                       <li>
                         <FontAwesomeIcon
-                          className="is-size-2"
+                          className="is-size-4"
                           icon={faArrowRight}
                         />
                       </li>
@@ -203,35 +177,25 @@ function App() {
                 </section>
               </div>
               <div className="column is-5">
-                <section className="hero next-prev round-corner has-background-white">
+                <section className="hero round-corner has-background-white next-prev">
                   <div className="hero-body py-4 px-5">
-                    <div className="columns">
-                      <div className="column is-8 py-3">
+                    <ul className="is-flex">
+                      <li>
                         <h1 className="is-size-6 has-text-primary">
                           March Income
                         </h1>
-                      </div>
-                      <div className="column is-4 py-3">
+                      </li>
+                      <li className="mr-1 ml-auto">
                         <div className="box-percentage is-size-7">
                           <FontAwesomeIcon icon={faArrowUp} />
                           7.5%
                         </div>
-                      </div>
-                    </div>
-                    <div className="columns">
-                      <div className="column pt-0">
-                        <h1 className="title is-size-2 has-text-primary">
-                          0.034768
-                        </h1>
-                      </div>
-                    </div>
-                    <div className="columns">
-                      <div className="column py-1">
-                        <h1 className="title is-size-5 has-text-primary">
-                          ETH
-                        </h1>
-                      </div>
-                    </div>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      0.034768
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
                 </section>
               </div>
@@ -241,7 +205,7 @@ function App() {
             {/* Statistics */}
             <div className="columns">
               <div className="column">
-                <section className="hero round-corner has-background-white statistics">
+                <section className="hero round-corner has-background-white is-medium">
                   <div className="hero-body py-4 px-5">
                     <h1 className="title has-text-primary">Statistics</h1>
                   </div>
@@ -251,38 +215,46 @@ function App() {
             {/* Detail */}
             <div className="columns">
               <div className="column is-7">
-                <section className="hero next-prev round-corner has-background-white">
+                <section className="hero detail-cost round-corner has-background-white">
                   <div className="hero-body py-4 px-5">
                     <h1 className="has-text-primary title-underline">
                       Detail Cost
                     </h1>
-                    <table className="table has-text-primary is-size-7">
-                      <tbody>
-                        <tr>
-                          <th>1.</th>
-                          <td>Sata Cable</td>
-                          <td>0.00003</td>
-                          <td>ETH</td>
-                        </tr>
-                        <tr>
-                          <th>1.</th>
-                          <td>Sata Cable</td>
-                          <td>0.00003</td>
-                          <td>ETH</td>
-                        </tr>
-                        <tr>
-                          <th>1.</th>
-                          <td>Sata Cable</td>
-                          <td>0.00003</td>
-                          <td>ETH</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <div className="box-table">
+                      <table className="table has-text-primary is-size-7 is-fullwidth is-hoverable">
+                        <tbody>
+                          <tr>
+                            <th className="is-borderless">1.</th>
+                            <td className="is-borderless">Sata Cable</td>
+                            <td className="is-borderless">0.00003</td>
+                            <td className="is-borderless">ETH</td>
+                          </tr>
+                          <tr>
+                            <th className="is-borderless">2.</th>
+                            <td className="is-borderless">Sata Cable</td>
+                            <td className="is-borderless">0.00003</td>
+                            <td className="is-borderless">ETH</td>
+                          </tr>
+                          <tr>
+                            <th className="is-borderless">3.</th>
+                            <td className="is-borderless">Sata Cable</td>
+                            <td className="is-borderless">0.00003</td>
+                            <td className="is-borderless">ETH</td>
+                          </tr>
+                          <tr>
+                            <th className="is-borderless">4.</th>
+                            <td className="is-borderless">Sata Cable</td>
+                            <td className="is-borderless">0.00003</td>
+                            <td className="is-borderless">ETH</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </section>
               </div>
               <div className="column is-5">
-                <section className="hero next-prev round-corner has-background-white">
+                <section className="hero round-corner has-background-white about">
                   <div className="hero-body py-4 px-5">
                     <h1 className="has-text-primary title-underline">About</h1>
                     <p className="has-text-primary is-size-7">
