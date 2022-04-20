@@ -7,9 +7,32 @@ import {
   faArrowRight,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { Bar } from 'react-chartjs-2';
+import BarChart from './components/BarChart';
+import { useState } from 'react';
+import { UserData } from './Data';
 
 function App() {
+  const [userData, setUserData] = useState({
+    labels: UserData.map((data) => data.year),
+    datasets: [
+      {
+        label: 'Users Gained',
+        data: UserData.map((data) => data.userGain),
+        backgroundColor: ['#1456C8'],
+        borderRadius: 10,
+        borderSkipped: false,
+      },
+      {
+        label: 'Users Lost',
+        data: UserData.map((data) => data.userLost),
+        backgroundColor: ['#B5BECB'],
+        borderRadius: 10,
+        borderSkipped: false,
+      },
+    ],
+  });
+
   return (
     <div>
       {/* NAVBAR */}
@@ -205,9 +228,20 @@ function App() {
             {/* Statistics */}
             <div className="columns">
               <div className="column">
-                <section className="hero round-corner has-background-white is-medium">
+                <section className="hero round-corner has-background-white is-medium statistics">
                   <div className="hero-body py-4 px-5">
                     <h1 className="title has-text-primary">Statistics</h1>
+                    <div className="bar-chart">
+                      <BarChart
+                        chartData={userData}
+                        chartOption={{
+                          title: {
+                            display: true,
+                            text: 'gg',
+                          },
+                        }}
+                      />
+                    </div>
                   </div>
                 </section>
               </div>

@@ -26,7 +26,7 @@ $table-cell-padding: 2px;
 }
 
 .overview {
-  min-height: 291px;
+  min-height: 300px;
 }
 .income {
   height: 150px;
@@ -68,7 +68,7 @@ $table-cell-padding: 2px;
 }
 
 .statistics {
-  height: 291px;
+  min-height: 300px;
 }
 
 .title-underline {
@@ -95,6 +95,10 @@ $table-cell-padding: 2px;
 }
 .about {
   min-height: 126px;
+}
+
+.bar-chart {
+  width: 400px;
 }
 
 // $grey-dark: $brown;
