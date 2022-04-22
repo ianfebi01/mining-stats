@@ -17,6 +17,10 @@ $body-background-color: $light;
 $box-padding: 2px;
 $table-cell-padding: 2px;
 
+.overflow {
+  overflow: overlay;
+}
+
 .nav-height {
   height: 92px;
 }
@@ -95,10 +99,15 @@ $table-cell-padding: 2px;
 }
 .about {
   min-height: 126px;
+  max-height: 126px;
+}
+
+.box-about {
+  max-height: 70px;
+  overflow: scroll;
 }
 
 .bar-chart {
-  width: 400px;
 }
 
 // $grey-dark: $brown;
@@ -112,4 +121,4 @@ $table-cell-padding: 2px;
 // $control-border-width: 2px;
 // $input-border-color: transparent;
 // $input-shadow: none;
-@import '../node_modules/bulma/bulma.sass';
+@import '../../../node_modules/bulma/bulma.sass';

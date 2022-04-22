@@ -1,4 +1,5 @@
-import './main.scss';
+import '../assets/style/main.scss';
+import React, { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUp,
@@ -7,12 +8,12 @@ import {
   faArrowRight,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
-import { Bar } from 'react-chartjs-2';
-import BarChart from './components/BarChart';
+import BarChart from '../components/homeComponents/BarChart.js';
 import { useState } from 'react';
-import { UserData } from './Data';
+import { UserData } from '../assets/data/Data';
+import useOutsideClick from '../components/homeComponents/useOutsideClick.js';
 
-function App() {
+function Home() {
   const [userData, setUserData] = useState({
     labels: UserData.map((data) => data.year),
     datasets: [
@@ -33,8 +34,23 @@ function App() {
     ],
   });
 
+  const [active, setActive] = useState('');
+
+  const changeActive = () => {
+    if (active === 'is-active') {
+      setActive('');
+    } else {
+      setActive('is-active');
+      console.log(active);
+    }
+  };
+  const ref = useRef();
+
+  useOutsideClick(ref, () => {
+    setActive('');
+  });
   return (
-    <div>
+    <div className="overflow">
       {/* NAVBAR */}
       <nav className="navbar is-transparent nav-height">
         <div className="container is-max-widescreen">
@@ -44,13 +60,18 @@ function App() {
                 MiningStats
               </strong>
             </a>
-            <div className="navbar-burger burger" data-target="navMenu">
+            <div
+              ref={ref}
+              onClick={changeActive}
+              className={`burger navbar-burger ${active}`}
+              data-target="navMenu"
+            >
               <span></span>
               <span></span>
               <span></span>
             </div>
           </div>
-          <div className="navbar-menu" id="navMenu">
+          <div className={`navbar-menu ${active}`} id="navMenu">
             <div className="navbar-start">
               <a href="#" className="navbar-item has-text-grey-light">
                 Add Income
@@ -74,7 +95,7 @@ function App() {
       </nav>
 
       {/* Body */}
-      <div className="container is-max-widescreen">
+      <div className="container is-max-widescreen px-1">
         {/* Header */}
         <section className="hero is-small">
           <div className="hero-body px-2">
@@ -232,7 +253,7 @@ function App() {
                   <div className="hero-body py-4 px-5">
                     <h1 className="title has-text-primary">Statistics</h1>
                     <div className="bar-chart">
-                      <BarChart
+                      {/* <BarChart
                         chartData={userData}
                         chartOption={{
                           title: {
@@ -240,7 +261,7 @@ function App() {
                             text: 'gg',
                           },
                         }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </section>
@@ -291,15 +312,17 @@ function App() {
                 <section className="hero round-corner has-background-white about">
                   <div className="hero-body py-4 px-5">
                     <h1 className="has-text-primary title-underline">About</h1>
-                    <p className="has-text-primary is-size-7">
-                      Design by ianfebi01, follow me for more design.
-                    </p>
-                    <ul>
-                      <li className="has-text-primary is-size-7 email">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                        <p className="email-text">ianfebi01@gmail.com</p>
-                      </li>
-                    </ul>
+                    <div className="box-about">
+                      <p className="has-text-primary is-size-7">
+                        Design by ianfebi01, follow me for more design.
+                      </p>
+                      <ul>
+                        <li className="has-text-primary is-size-7 email">
+                          <FontAwesomeIcon icon={faEnvelope} />
+                          <p className="email-text">ianfebi01@gmail.com</p>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </section>
               </div>
@@ -311,4 +334,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
