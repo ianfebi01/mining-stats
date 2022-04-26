@@ -7,13 +7,17 @@ import {
   faArrowLeft,
   faArrowRight,
   faEnvelope,
+  faAngleDown,
 } from '@fortawesome/free-solid-svg-icons';
 import BarChart from '../components/homeComponents/BarChart.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserData } from '../assets/data/Data';
 import useOutsideClick from '../components/homeComponents/useOutsideClick.js';
+import axios from 'axios';
+import { getDatasetAtEvent } from 'react-chartjs-2';
 
 function Home() {
+  // Chart
   const [userData, setUserData] = useState({
     labels: UserData.map((data) => data.year),
     datasets: [
@@ -33,7 +37,7 @@ function Home() {
       },
     ],
   });
-
+  // Burger
   const [active, setActive] = useState('');
 
   const changeActive = () => {
@@ -49,6 +53,75 @@ function Home() {
   useOutsideClick(ref, () => {
     setActive('');
   });
+
+  // Data
+  const [income, setIncome] = useState([]);
+
+  useEffect(() => {
+    getIncomes();
+  }, []);
+
+  const getIncomes = async () => {
+    const response = await axios.get('http://localhost:406/income');
+    setIncome(response.data);
+  };
+
+  const [value, setValue] = useState('');
+  const [fee, setFee] = useState('');
+  const [date, setDate] = useState('');
+
+  const current = new Date();
+  const currentMonth = current.getMonth() + 1;
+
+  const getIncomeById = async (id) => {
+    const response = await axios.get(`http://localhost:406/income/${id}`);
+    setValue(response.data.value);
+    setFee(response.data.fee);
+    setDate(response.data.date);
+    console.log(fee);
+  };
+
+  const getIncomeThisMonth = () => {
+    income.map((income) => {
+      var id = income;
+      const x = Object.keys(id).length;
+      console.log(x);
+    });
+
+    // var now = getDate(income.data.date);
+    // var id = income.data.id;
+    // var i = id.lenght;
+    // console.log(id);
+  };
+
+  const getDate = (date) => {
+    var days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    var months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    var now = new Date(date);
+    return months[now.getMonth()];
+  };
+
   return (
     <div className="overflow">
       {/* NAVBAR */}
@@ -73,7 +146,11 @@ function Home() {
           </div>
           <div className={`navbar-menu ${active}`} id="navMenu">
             <div className="navbar-start">
-              <a href="#" className="navbar-item has-text-grey-light">
+              <a
+                onClick={getIncomeThisMonth}
+                href="#"
+                className="navbar-item has-text-grey-light"
+              >
                 Add Income
               </a>
               <a href="#" className="navbar-item has-text-grey-light">
@@ -112,7 +189,50 @@ function Home() {
               <div className="column">
                 <section className="hero is-medium round-corner has-background-white overview">
                   <div className="hero-body py-4 px-5 ">
-                    <h1 className="title has-text-primary">Overview</h1>
+                    <ul className="is-flex">
+                      <li>
+                        <h1 className="title has-text-primary">Overview</h1>
+                      </li>
+                      <li className="mr-1 ml-auto">
+                        {/* Dropdown */}
+                        <div className="dropdown is-hoverable">
+                          <div className="dropdown-trigger">
+                            <button
+                              className="button mb-2 has-text-grey-primary"
+                              aria-haspopup="true"
+                              aria-controls="dropdown-menu"
+                            >
+                              <span className="is-size-7">Select Month</span>
+                              <span className="icon is-small">
+                                <FontAwesomeIcon icon={faAngleDown} />
+                              </span>
+                            </button>
+                          </div>
+                          <div
+                            className="dropdown-menu"
+                            id="dropdown-menu"
+                            role="menu"
+                          >
+                            <div className="dropdown-content">
+                              <section>
+                                {income.map((income) => (
+                                  <div key={income.id}>
+                                    <a
+                                      href="#"
+                                      className="dropdown-item"
+                                      onClick={() => getIncomeById(income.id)}
+                                    >
+                                      {getDate(income.date)}
+                                    </a>
+                                  </div>
+                                ))}
+                              </section>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+
                     <section className="hero round-corner has-background-light mb-4">
                       <div className="hero-body py-4 px-5">
                         <div className="columns">
@@ -122,7 +242,7 @@ function Home() {
                                 <ul className="is-flex">
                                   <li>
                                     <h1 className="is-size-6 has-text-primary">
-                                      March Income
+                                      {getDate(date)}
                                     </h1>
                                   </li>
                                   <li className="mr-1 ml-auto">
@@ -133,7 +253,7 @@ function Home() {
                                   </li>
                                 </ul>
                                 <h1 className="title is-size-2 has-text-primary my-2">
-                                  0.034768
+                                  {value - fee}
                                 </h1>
                                 <h1 className="title is-size-5 has-text-primary">
                                   ETH
@@ -147,7 +267,7 @@ function Home() {
                                 <ul className="is-flex">
                                   <li>
                                     <h1 className="is-size-6 has-text-primary">
-                                      March Income
+                                      March Cost
                                     </h1>
                                   </li>
                                   <li className="mr-1 ml-auto">

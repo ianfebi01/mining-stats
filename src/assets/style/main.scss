@@ -16,6 +16,9 @@ $light: $bg-light;
 $body-background-color: $light;
 $box-padding: 2px;
 $table-cell-padding: 2px;
+$button-border-width: 0;
+$button-border-width: 1px;
+$button-text-color: $grey;
 
 .overflow {
   overflow: overlay;
@@ -38,7 +41,7 @@ $table-cell-padding: 2px;
   box-shadow: 2px 3px 15px 6px rgba(0, 0, 0, 0.09);
 }
 .cost {
-  height: 150px;
+  min-height: 150px;
 }
 .box-percentage {
   padding: 2px;
