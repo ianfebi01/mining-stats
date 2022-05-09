@@ -1,5 +1,5 @@
 import '../assets/style/main.scss';
-import React, { useRef } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUp,
@@ -8,35 +8,23 @@ import {
   faArrowRight,
   faEnvelope,
   faAngleDown,
+  faPenToSquare,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import BarChart from '../components/homeComponents/BarChart.js';
+import { Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 import { UserData } from '../assets/data/Data';
 import useOutsideClick from '../components/homeComponents/useOutsideClick.js';
 import axios from 'axios';
 import { getDatasetAtEvent } from 'react-chartjs-2';
+import { getDateGG } from '../components/homeComponents/date';
+import ReadOnlyRow from '../components/homeComponents/ReadOnlyRow.js';
+import EditableRow from '../components/homeComponents/EditableRow';
+import IncomeThisMonth from '../components/homeComponents/IncomeThisMonth';
+import FilteredCost from '../components/homeComponents/FilteredCost';
 
 function Home() {
-  // Chart
-  const [userData, setUserData] = useState({
-    labels: UserData.map((data) => data.year),
-    datasets: [
-      {
-        label: 'Users Gained',
-        data: UserData.map((data) => data.userGain),
-        backgroundColor: ['#1456C8'],
-        borderRadius: 10,
-        borderSkipped: false,
-      },
-      {
-        label: 'Users Lost',
-        data: UserData.map((data) => data.userLost),
-        backgroundColor: ['#B5BECB'],
-        borderRadius: 10,
-        borderSkipped: false,
-      },
-    ],
-  });
   // Burger
   const [active, setActive] = useState('');
 
@@ -45,7 +33,6 @@ function Home() {
       setActive('');
     } else {
       setActive('is-active');
-      console.log(active);
     }
   };
   const ref = useRef();
@@ -56,10 +43,23 @@ function Home() {
 
   // Data
   const [income, setIncome] = useState([]);
+  const [cost, setCost] = useState([]);
+  const [filterResults, setFilterResults] = useState([]);
+  const [joh, setJoh] = useState([]);
+  const [editDetailId, setEditDetailId] = useState(null);
+  const [idDetail, setIdDetail] = useState('');
+  const [detail, setDetail] = useState('');
+  const [price, setPrice] = useState('');
+  const [dateDetail, setDateDetail] = useState('');
 
+  // UseEffect
   useEffect(() => {
     getIncomes();
   }, []);
+
+  useEffect(() => {
+    getCost();
+  }, [editDetailId]);
 
   const getIncomes = async () => {
     const response = await axios.get('http://localhost:406/income');
@@ -73,29 +73,163 @@ function Home() {
   const current = new Date();
   const currentMonth = current.getMonth() + 1;
 
+  const now = new Date();
+  const prev = new Date(date);
+  const zzz = prev.getMonth();
+  const zzzn = prev.getMonth() + 2;
+  const zzznn = now.getMonth() + 2;
+  const prevN = prev.getFullYear() + '-' + zzz + '-' + prev.getDate();
+  const prevNn = prev.getFullYear() + '-' + zzzn + '-' + prev.getDate();
+  const defMonth = now.getFullYear() + '-' + zzznn + '-' + now.getDate();
+
+  const month = () => {
+    if (now.getMonth().lenght > 1) {
+      return now.getMonth() + 1;
+    } else {
+      var gg = now.getMonth() + 1;
+      return '0' + gg;
+    }
+  };
+
+  const monthPrev = () => {
+    if (prev.getMonth().lenght > 1) {
+      return prev.getMonth();
+    } else {
+      var gg = prev.getMonth();
+      return '0' + gg;
+    }
+  };
+  const monthNext = () => {
+    if (prev.getMonth().lenght > 1) {
+      return prev.getMonth() + 2;
+    } else {
+      var gg = prev.getMonth() + 2;
+      return '0' + gg;
+    }
+  };
+
+  const fPrevMonth = () => {
+    if (now.getMonth().lenght > 1) {
+      return now.getMonth();
+    } else {
+      var gg = now.getMonth();
+      return '0' + gg;
+    }
+  };
+  const fNextMonth = () => {
+    if (now.getMonth().lenght > 1) {
+      return now.getMonth() + 2;
+    } else {
+      var gg = now.getMonth() + 2;
+      return '0' + gg;
+    }
+  };
+
+  const thisMonth = now.getFullYear() + '-' + month();
+  const prevMonthI = prev.getFullYear() + '-' + monthPrev();
+  const prevMonthF = now.getFullYear() + '-' + fPrevMonth();
+  const nextMonthI = prev.getFullYear() + '-' + monthNext();
+  const nextMonthF = now.getFullYear() + '-' + fNextMonth();
+
+  const filteredData = income.filter((item) => item.date.includes(thisMonth));
+
+  const filteredPrevMonth = income.filter((item) =>
+    item.date.includes(prevMonthF)
+  );
+
+  const filteredNextMonth = income.filter((item) =>
+    item.date.includes(nextMonthF)
+  );
+
+  const incomePrevMonth = income.filter((item) =>
+    item.date.includes(prevMonthI)
+  );
+  const incomeNextMonth = income.filter((item) =>
+    item.date.includes(nextMonthI)
+  );
+
   const getIncomeById = async (id) => {
     const response = await axios.get(`http://localhost:406/income/${id}`);
+    setFilterResults('gg');
+    setJoh(response.data);
     setValue(response.data.value);
     setFee(response.data.fee);
     setDate(response.data.date);
-    console.log(fee);
   };
 
-  const getIncomeThisMonth = () => {
-    income.map((income) => {
-      var id = income;
-      const x = Object.keys(id).length;
-      console.log(x);
-    });
+  const wer = [{ value: value, fee: fee, date: date }];
+  const jembut = getDateGG(prevNn);
+  const defaultd = [{ value: 0, fee: 0, date: jembut }];
+  const [filterCost, setFilterCost] = useState('');
 
-    // var now = getDate(income.data.date);
-    // var id = income.data.id;
-    // var i = id.lenght;
-    // console.log(id);
+  const pp = (a) => {
+    return a.toString().substring(0, 5);
   };
 
-  const getDate = (date) => {
-    var days = [
+  // Cost
+  const getCost = async () => {
+    const response = await axios.get('http://localhost:406/cost');
+    setCost(response.data);
+  };
+
+  const monthByDate = new Date(date);
+  const monthSelected = () => {
+    if (monthByDate.getMonth().lenght > 1) {
+      return monthByDate.getMonth() + 1;
+    } else {
+      var gg = monthByDate.getMonth() + 1;
+      return '0' + gg;
+    }
+  };
+  const selectedMonth = now.getFullYear() + '-' + monthSelected();
+
+  const costThisMonth = cost.filter((item) => item.date.includes(thisMonth));
+  const costBySelectedMonth = cost.filter((item) =>
+    item.date.includes(selectedMonth)
+  );
+
+  const sumCostThisMonth = costThisMonth
+    .map((item) => item.price)
+    .reduce((acc, item) => item + acc, 0);
+
+  const sumCostBySelectedMonth = costBySelectedMonth
+    .map((item) => item.price)
+    .reduce((acc, item) => item + acc, 0);
+
+  console.log('cost', sumCostBySelectedMonth, selectedMonth);
+
+  var bills = [
+    {
+      refNo: 17,
+      billDate: '1-apr-2016',
+      dueDate: '30-apr-2016',
+      pendingAmount: 4500,
+      overdueDays: 28,
+    },
+    {
+      refNo: 20,
+      billDate: '15-apr-2016',
+      dueDate: '3-may-2016',
+      pendingAmount: 56550,
+      overdueDays: 15,
+    },
+    {
+      refNo: 24,
+      billDate: '15-apr-2016',
+      dueDate: '5-may-2016',
+      pendingAmount: 5655,
+      overdueDays: 15,
+    },
+  ];
+  var res = bills
+    .map((bill) => bill.pendingAmount)
+    .reduce((acc, bill) => bill + acc);
+  console.log(res);
+
+  // Chart
+
+  const [data, setData] = useState({
+    labels: [
       'Sunday',
       'Monday',
       'Tuesday',
@@ -103,23 +237,77 @@ function Home() {
       'Thursday',
       'Friday',
       'Saturday',
-    ];
-    var months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    var now = new Date(date);
-    return months[now.getMonth()];
+    ],
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(25, 90, 13, 0.5)',
+      },
+    ],
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = 'http://localhost:406/income';
+      const labelSet = [];
+      const dataSet1 = [];
+
+      await fetch(url)
+        .then((data) => {
+          console.log('Api data', data);
+          const res = data.json();
+          return res;
+        })
+        .then((res) => {
+          console.log('ressss', res);
+          for (const val of res) {
+            dataSet1.push(val.value - val.fee);
+
+            labelSet.push(getDateGG(val.date));
+          }
+          setData({
+            labels: labelSet,
+            datasets: [
+              {
+                label: 'Total WD',
+                data: dataSet1,
+                backgroundColor: ['#1456C8'],
+                borderRadius: 20,
+                borderSkipped: false,
+              },
+            ],
+          });
+        })
+        .catch((e) => {
+          console.log('error', e);
+        });
+    };
+
+    fetchData();
+  }, []);
+
+  // Detail
+
+  const handleEditDetailClick = (event, item) => {
+    event.preventDefault();
+    setEditDetailId(item.id);
+    setIdDetail(item.id);
+    setDetail(item.detail);
+    setPrice(item.price);
+    setDateDetail(item.date);
+  };
+  const handleEditDetailCancel = () => {
+    setEditDetailId(null);
+  };
+  const editDetail = async (e) => {
+    e.preventDefault();
+    await axios.patch(`http://localhost:406/cost/${idDetail}`, {
+      detail: detail,
+      price: price,
+      date: dateDetail,
+    });
+    handleEditDetailCancel();
   };
 
   return (
@@ -146,16 +334,13 @@ function Home() {
           </div>
           <div className={`navbar-menu ${active}`} id="navMenu">
             <div className="navbar-start">
-              <a
-                onClick={getIncomeThisMonth}
-                href="#"
-                className="navbar-item has-text-grey-light"
-              >
+              <a href="#" className="navbar-item has-text-grey-light">
                 Add Income
               </a>
               <a href="#" className="navbar-item has-text-grey-light">
                 Add Cost
               </a>
+              <a href="#" className="navbar-item has-text-grey-light"></a>
             </div>
             <div className="navbar-end">
               <div className="navbar-item">
@@ -222,7 +407,7 @@ function Home() {
                                       className="dropdown-item"
                                       onClick={() => getIncomeById(income.id)}
                                     >
-                                      {getDate(income.date)}
+                                      {getDateGG(income.date)}
                                     </a>
                                   </div>
                                 ))}
@@ -238,27 +423,55 @@ function Home() {
                         <div className="columns">
                           <div className="column is-6">
                             <section className="hero round-corner has-background-white">
-                              <div className="hero-body px-4 py-5">
-                                <ul className="is-flex">
-                                  <li>
-                                    <h1 className="is-size-6 has-text-primary">
-                                      {getDate(date)}
-                                    </h1>
-                                  </li>
-                                  <li className="mr-1 ml-auto">
-                                    <div className="box-percentage is-size-7">
-                                      <FontAwesomeIcon icon={faArrowUp} />
-                                      7.5%
+                              {filterResults == '' ? (
+                                filteredData.map((item) => {
+                                  return (
+                                    <div
+                                      className="hero-body px-4 py-5"
+                                      key={item.id}
+                                    >
+                                      <ul className="is-flex">
+                                        <li>
+                                          <h1 className="is-size-6 has-text-primary">
+                                            {getDateGG(item.date)}
+                                          </h1>
+                                        </li>
+                                        <li className="mr-1 ml-auto">
+                                          <div className="box-percentage is-size-7">
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            {pp(
+                                              item.value -
+                                                item.fee -
+                                                filteredPrevMonth.map((n) => {
+                                                  return n.value - n.fee;
+                                                }) /
+                                                  (item.value - item.fee)
+                                            )}
+                                            %
+                                          </div>
+                                        </li>
+                                      </ul>
+                                      <h1 className="title is-size-2 has-text-primary my-2">
+                                        {item.value - item.fee}
+                                      </h1>
+                                      <h1 className="title is-size-5 has-text-primary">
+                                        ETH
+                                      </h1>
                                     </div>
-                                  </li>
-                                </ul>
-                                <h1 className="title is-size-2 has-text-primary my-2">
-                                  {value - fee}
-                                </h1>
-                                <h1 className="title is-size-5 has-text-primary">
-                                  ETH
-                                </h1>
-                              </div>
+                                  );
+                                })
+                              ) : (
+                                <IncomeThisMonth
+                                  value={value}
+                                  fee={fee}
+                                  date={date}
+                                  pp={pp}
+                                  filteredPrevMonth={filteredPrevMonth}
+                                  getDateGG={getDateGG}
+                                  FontAwesomeIcon={FontAwesomeIcon}
+                                  faArrowUp={faArrowUp}
+                                />
+                              )}
                             </section>
                           </div>
                           <div className="column is-6">
@@ -267,18 +480,26 @@ function Home() {
                                 <ul className="is-flex">
                                   <li>
                                     <h1 className="is-size-6 has-text-primary">
-                                      March Cost
+                                      {filterResults == ''
+                                        ? getDateGG(
+                                            filteredData.map(
+                                              (item) => item.date
+                                            )
+                                          )
+                                        : getDateGG(date)}{' '}
+                                      Cost
                                     </h1>
                                   </li>
                                   <li className="mr-1 ml-auto">
                                     <div className="box-percentage is-size-7">
-                                      {/* <FontAwesomeIcon icon={faArrowUp} /> */}
                                       7.5%
                                     </div>
                                   </li>
                                 </ul>
                                 <h1 className="title is-size-2 has-text-primary my-2">
-                                  0.034768
+                                  {filterResults == ''
+                                    ? sumCostThisMonth
+                                    : sumCostBySelectedMonth}
                                 </h1>
                                 <h1 className="title is-size-5 has-text-primary">
                                   ETH
@@ -297,25 +518,65 @@ function Home() {
             <div className="columns">
               <div className="column is-5">
                 <section className="hero round-corner has-background-white next-prev">
-                  <div className="hero-body py-4 px-5">
-                    <ul className="is-flex">
-                      <li>
-                        <h1 className="is-size-6 has-text-primary">
-                          March Income
-                        </h1>
-                      </li>
-                      <li className="mr-1 ml-auto">
-                        <div className="box-percentage is-size-7">
-                          <FontAwesomeIcon icon={faArrowUp} />
-                          7.5%
-                        </div>
-                      </li>
-                    </ul>
-                    <h1 className="title is-size-3 has-text-primary my-2">
-                      0.034768
-                    </h1>
-                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
-                  </div>
+                  {filterResults == ''
+                    ? filteredPrevMonth.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(item.date)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              {item.value - item.fee}
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })
+                    : incomePrevMonth == ''
+                    ? wer.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(prevN)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              0
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })
+                    : incomePrevMonth.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(item.date)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              {item.value - item.fee}
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })}
                 </section>
               </div>
               <div className="column is-2">
@@ -342,25 +603,85 @@ function Home() {
               </div>
               <div className="column is-5">
                 <section className="hero round-corner has-background-white next-prev">
-                  <div className="hero-body py-4 px-5">
-                    <ul className="is-flex">
-                      <li>
-                        <h1 className="is-size-6 has-text-primary">
-                          March Income
-                        </h1>
-                      </li>
-                      <li className="mr-1 ml-auto">
-                        <div className="box-percentage is-size-7">
-                          <FontAwesomeIcon icon={faArrowUp} />
-                          7.5%
-                        </div>
-                      </li>
-                    </ul>
-                    <h1 className="title is-size-3 has-text-primary my-2">
-                      0.034768
-                    </h1>
-                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
-                  </div>
+                  {filterResults == '' && filteredNextMonth == ''
+                    ? defaultd.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(defMonth)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              {item.value - item.fee}
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })
+                    : filterResults == ''
+                    ? filteredNextMonth.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(item.date)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              {item.value - item.fee}
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })
+                    : incomeNextMonth == ''
+                    ? wer.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(prevNn)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              0
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })
+                    : incomeNextMonth.map((item) => {
+                        return (
+                          <div className="hero-body py-4 px-5" key={item.id}>
+                            <ul className="is-flex">
+                              <li>
+                                <h1 className="is-size-6 has-text-primary">
+                                  {getDateGG(item.date)}
+                                </h1>
+                              </li>
+                            </ul>
+                            <h1 className="title is-size-3 has-text-primary my-2">
+                              {item.value - item.fee}
+                            </h1>
+                            <h1 className="title is-size-6 has-text-primary">
+                              ETH
+                            </h1>
+                          </div>
+                        );
+                      })}
                 </section>
               </div>
             </div>
@@ -373,15 +694,15 @@ function Home() {
                   <div className="hero-body py-4 px-5">
                     <h1 className="title has-text-primary">Statistics</h1>
                     <div className="bar-chart">
-                      {/* <BarChart
-                        chartData={userData}
+                      <BarChart
+                        chartData={data}
                         chartOption={{
                           title: {
                             display: true,
                             text: 'gg',
                           },
                         }}
-                      /> */}
+                      />
                     </div>
                   </div>
                 </section>
@@ -389,46 +710,55 @@ function Home() {
             </div>
             {/* Detail */}
             <div className="columns">
-              <div className="column is-7">
+              <div className="column is-12">
                 <section className="hero detail-cost round-corner has-background-white">
                   <div className="hero-body py-4 px-5">
-                    <h1 className="has-text-primary title-underline">
-                      Detail Cost
-                    </h1>
+                    <div className="title-underline is-flex">
+                      <h1 className="has-text-primary ">Detail Cost</h1>
+                    </div>
                     <div className="box-table">
-                      <table className="table has-text-primary is-size-7 is-fullwidth is-hoverable">
-                        <tbody>
-                          <tr>
-                            <th className="is-borderless">1.</th>
-                            <td className="is-borderless">Sata Cable</td>
-                            <td className="is-borderless">0.00003</td>
-                            <td className="is-borderless">ETH</td>
-                          </tr>
-                          <tr>
-                            <th className="is-borderless">2.</th>
-                            <td className="is-borderless">Sata Cable</td>
-                            <td className="is-borderless">0.00003</td>
-                            <td className="is-borderless">ETH</td>
-                          </tr>
-                          <tr>
-                            <th className="is-borderless">3.</th>
-                            <td className="is-borderless">Sata Cable</td>
-                            <td className="is-borderless">0.00003</td>
-                            <td className="is-borderless">ETH</td>
-                          </tr>
-                          <tr>
-                            <th className="is-borderless">4.</th>
-                            <td className="is-borderless">Sata Cable</td>
-                            <td className="is-borderless">0.00003</td>
-                            <td className="is-borderless">ETH</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <form onSubmit={editDetail}>
+                        <table className="table has-text-primary is-size-7 is-fullwidth is-hoverable">
+                          <tbody>
+                            {cost.map((item, index) => {
+                              return (
+                                <Fragment>
+                                  {editDetailId === item.id ? (
+                                    <EditableRow
+                                      item={item}
+                                      index={index}
+                                      detail={detail}
+                                      price={price}
+                                      dateDetail={dateDetail}
+                                      setDetail={setDetail}
+                                      setPrice={setPrice}
+                                      setDateDetail={setDateDetail}
+                                      handleEditDetailCancel={
+                                        handleEditDetailCancel
+                                      }
+                                    />
+                                  ) : (
+                                    <ReadOnlyRow
+                                      item={item}
+                                      index={index}
+                                      handleEditDetailClick={
+                                        handleEditDetailClick
+                                      }
+                                      faPenToSquare={faPenToSquare}
+                                      faTrashCan={faTrashCan}
+                                    />
+                                  )}
+                                </Fragment>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </form>
                     </div>
                   </div>
                 </section>
               </div>
-              <div className="column is-5">
+              {/* <div className="column is-5">
                 <section className="hero round-corner has-background-white about">
                   <div className="hero-body py-4 px-5">
                     <h1 className="has-text-primary title-underline">About</h1>
@@ -445,7 +775,7 @@ function Home() {
                     </div>
                   </div>
                 </section>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

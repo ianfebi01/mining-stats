@@ -95,7 +95,7 @@ $button-text-color: $grey;
 }
 .box-table {
   max-height: 70px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .table .is-borderless {
   border: 0;
