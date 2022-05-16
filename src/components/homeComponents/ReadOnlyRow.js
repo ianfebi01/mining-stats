@@ -7,6 +7,7 @@ const ReadOnlyRow = ({
   handleEditDetailClick,
   faPenToSquare,
   faTrashCan,
+  deleteDetail,
 }) => {
   return (
     <tr key={item.id}>
@@ -16,12 +17,17 @@ const ReadOnlyRow = ({
       <td className="is-borderless">ETH</td>
       <td className="is-borderless">
         <FontAwesomeIcon
+          className="is-clickable"
           icon={faPenToSquare}
           onClick={(event) => handleEditDetailClick(event, item)}
         />
       </td>
       <td className="is-borderless">
-        <FontAwesomeIcon icon={faTrashCan} />
+        <FontAwesomeIcon
+          className="is-clickable"
+          onClick={() => deleteDetail(item.id)}
+          icon={faTrashCan}
+        />
       </td>
     </tr>
   );

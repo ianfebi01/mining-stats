@@ -1,8 +1,7 @@
 import React from 'react';
 
 const IncomeThisMonth = ({
-  value,
-  fee,
+  sumIncomeBySelectedMonth,
   date,
   pp,
   filteredPrevMonth,
@@ -19,19 +18,13 @@ const IncomeThisMonth = ({
         <li className="mr-1 ml-auto">
           <div className="box-percentage is-size-7">
             <FontAwesomeIcon icon={faArrowUp} />
-            {pp(
-              value -
-                fee -
-                filteredPrevMonth.map((n) => {
-                  return n.value - n.fee;
-                }) /
-                  (value - fee)
-            )}
-            %
+            {pp(sumIncomeBySelectedMonth)}%
           </div>
         </li>
       </ul>
-      <h1 className="title is-size-2 has-text-primary my-2">{value - fee}</h1>
+      <h1 className="title is-size-2 has-text-primary my-2">
+        {sumIncomeBySelectedMonth}
+      </h1>
       <h1 className="title is-size-5 has-text-primary">ETH</h1>
     </div>
   );

@@ -1,18 +1,16 @@
-const EditableRow = ({
-  item,
-  index,
-  detail,
-  price,
-  dateDetail,
-  setDetail,
-  setPrice,
-  setDateDetail,
-  handleEditDetailCancel,
-  key,
-}) => {
+import React from 'react';
+
+const AddDetail = (
+  newDetail,
+  newPrice,
+  newDateDetail,
+  setNewDetail,
+  setNewPrice,
+  setNewDateDetail
+) => {
   return (
     <tr>
-      <th className="is-borderless">{index + 1}</th>
+      {/* <th className="is-borderless">{index + 1}</th> */}
       <td className="is-borderless">
         <input
           className="input is-small"
@@ -20,8 +18,8 @@ const EditableRow = ({
           required="required"
           name="detail"
           placeholder="Detail"
-          value={detail}
-          onChange={(e) => setDetail(e.target.value)}
+          value={newDetail}
+          onChange={(e) => setNewDetail(e.target.value)}
         ></input>
       </td>
       <td className="is-borderless">
@@ -31,8 +29,8 @@ const EditableRow = ({
           step="0.01"
           placeholder="Price"
           name="price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          value={newPrice}
+          onChange={(e) => setNewPrice(e.target.value)}
         ></input>
       </td>
       <td className="is-borderless">
@@ -40,8 +38,8 @@ const EditableRow = ({
           className="input is-small "
           type="date"
           name="date"
-          value={dateDetail}
-          onChange={(e) => setDateDetail(e.target.value)}
+          value={newDateDetail}
+          onChange={(e) => setNewDateDetail(e.target.value)}
         ></input>
       </td>
       <td>
@@ -49,17 +47,8 @@ const EditableRow = ({
           Save
         </button>
       </td>
-      <td>
-        <button
-          type="button"
-          className="button is-small"
-          onClick={handleEditDetailCancel}
-        >
-          Cancel
-        </button>
-      </td>
     </tr>
   );
 };
 
-export default EditableRow;
+export default AddDetail;

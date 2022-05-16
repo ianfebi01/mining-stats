@@ -3,50 +3,29 @@ import React, { Fragment, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUp,
-  faPowerOff,
   faArrowLeft,
   faArrowRight,
-  faEnvelope,
   faAngleDown,
   faPenToSquare,
   faTrashCan,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import BarChart from '../components/homeComponents/BarChart.js';
-import { Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
-import { UserData } from '../assets/data/Data';
-import useOutsideClick from '../components/homeComponents/useOutsideClick.js';
 import axios from 'axios';
-import { getDatasetAtEvent } from 'react-chartjs-2';
 import { getDateGG } from '../components/homeComponents/date';
 import ReadOnlyRow from '../components/homeComponents/ReadOnlyRow.js';
 import EditableRow from '../components/homeComponents/EditableRow';
 import IncomeThisMonth from '../components/homeComponents/IncomeThisMonth';
-import FilteredCost from '../components/homeComponents/FilteredCost';
+import Header from '../components/homeComponents/Header';
 
-function Home() {
-  // Burger
-  const [active, setActive] = useState('');
-
-  const changeActive = () => {
-    if (active === 'is-active') {
-      setActive('');
-    } else {
-      setActive('is-active');
-    }
-  };
-  const ref = useRef();
-
-  useOutsideClick(ref, () => {
-    setActive('');
-  });
-
+const Home = () => {
   // Data
   const [income, setIncome] = useState([]);
   const [cost, setCost] = useState([]);
   const [filterResults, setFilterResults] = useState([]);
   const [joh, setJoh] = useState([]);
-  const [editDetailId, setEditDetailId] = useState(null);
+  const [editDetailId, setEditDetailId] = useState('');
   const [idDetail, setIdDetail] = useState('');
   const [detail, setDetail] = useState('');
   const [price, setPrice] = useState('');
@@ -59,7 +38,7 @@ function Home() {
 
   useEffect(() => {
     getCost();
-  }, [editDetailId]);
+  }, []);
 
   const getIncomes = async () => {
     const response = await axios.get('http://localhost:406/income');
@@ -148,6 +127,225 @@ function Home() {
     item.date.includes(nextMonthI)
   );
 
+  const sumIncomeThisMonth =
+    filteredData
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    filteredData.map((item) => item.fee).reduce((acc, item) => item + acc, 0);
+
+  const sumFilteredPrevMonth =
+    filteredPrevMonth
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    filteredPrevMonth
+      .map((item) => item.fee)
+      .reduce((acc, item) => item + acc, 0);
+  const sumIncomePrevMonth =
+    incomePrevMonth
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    incomePrevMonth
+      .map((item) => item.fee)
+      .reduce((acc, item) => item + acc, 0);
+
+  const sumFilteredNextMonth =
+    filteredNextMonth
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    filteredNextMonth
+      .map((item) => item.fee)
+      .reduce((acc, item) => item + acc, 0);
+
+  const sumIncomeNextMonth =
+    incomeNextMonth
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    incomeNextMonth
+      .map((item) => item.fee)
+      .reduce((acc, item) => item + acc, 0);
+
+  const monthByDate = new Date(date);
+  const monthSelected = () => {
+    if (monthByDate.getMonth().lenght > 1) {
+      return monthByDate.getMonth() + 1;
+    } else {
+      var gg = monthByDate.getMonth() + 1;
+      return '0' + gg;
+    }
+  };
+  const selectedMonth = now.getFullYear() + '-' + monthSelected();
+
+  const incomeBySelectedMonth = income.filter((item) =>
+    item.date.includes(selectedMonth)
+  );
+  const sumIncomeBySelectedMonth =
+    incomeBySelectedMonth
+      .map((item) => item.value)
+      .reduce((acc, item) => item + acc, 0) -
+    incomeBySelectedMonth
+      .map((item) => item.fee)
+      .reduce((acc, item) => item + acc, 0);
+
+  const monthToSelect = [
+    {
+      text: 'January',
+      date: '2022-01',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-01'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-01'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'February',
+      date: '2022-02',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-02'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-02'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'March',
+      date: '2022-03',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-03'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-03'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'April',
+      date: '2022-04',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-04'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-04'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'May',
+      date: '2022-05',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-05'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-05'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'June',
+      date: '2022-06',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-06'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-06'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'July',
+      date: '2022-07',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-07'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-07'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'August',
+      date: '2022-08',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-08'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-08'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'September',
+      date: '2022-09',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-09'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-09'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'October',
+      date: '2022-10',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-10'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-10'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'November',
+      date: '2022-11',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-11'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-11'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+    {
+      text: 'December',
+      date: '2022-12',
+      income:
+        income
+          .filter((item) => item.date.includes('2022-12'))
+          .map((item) => item.value)
+          .reduce((acc, item) => item + acc, 0) -
+        income
+          .filter((item) => item.date.includes('2022-12'))
+          .map((item) => item.fee)
+          .reduce((acc, item) => item + acc, 0),
+    },
+  ];
+  console.log(monthToSelect);
+
   const getIncomeById = async (id) => {
     const response = await axios.get(`http://localhost:406/income/${id}`);
     setFilterResults('gg');
@@ -155,6 +353,11 @@ function Home() {
     setValue(response.data.value);
     setFee(response.data.fee);
     setDate(response.data.date);
+  };
+
+  const getIncomeByMonth = (x) => {
+    setDate(x);
+    setFilterResults('gg');
   };
 
   const wer = [{ value: value, fee: fee, date: date }];
@@ -172,18 +375,8 @@ function Home() {
     setCost(response.data);
   };
 
-  const monthByDate = new Date(date);
-  const monthSelected = () => {
-    if (monthByDate.getMonth().lenght > 1) {
-      return monthByDate.getMonth() + 1;
-    } else {
-      var gg = monthByDate.getMonth() + 1;
-      return '0' + gg;
-    }
-  };
-  const selectedMonth = now.getFullYear() + '-' + monthSelected();
-
   const costThisMonth = cost.filter((item) => item.date.includes(thisMonth));
+
   const costBySelectedMonth = cost.filter((item) =>
     item.date.includes(selectedMonth)
   );
@@ -195,36 +388,6 @@ function Home() {
   const sumCostBySelectedMonth = costBySelectedMonth
     .map((item) => item.price)
     .reduce((acc, item) => item + acc, 0);
-
-  console.log('cost', sumCostBySelectedMonth, selectedMonth);
-
-  var bills = [
-    {
-      refNo: 17,
-      billDate: '1-apr-2016',
-      dueDate: '30-apr-2016',
-      pendingAmount: 4500,
-      overdueDays: 28,
-    },
-    {
-      refNo: 20,
-      billDate: '15-apr-2016',
-      dueDate: '3-may-2016',
-      pendingAmount: 56550,
-      overdueDays: 15,
-    },
-    {
-      refNo: 24,
-      billDate: '15-apr-2016',
-      dueDate: '5-may-2016',
-      pendingAmount: 5655,
-      overdueDays: 15,
-    },
-  ];
-  var res = bills
-    .map((bill) => bill.pendingAmount)
-    .reduce((acc, bill) => bill + acc);
-  console.log(res);
 
   // Chart
 
@@ -255,7 +418,6 @@ function Home() {
 
       await fetch(url)
         .then((data) => {
-          console.log('Api data', data);
           const res = data.json();
           return res;
         })
@@ -298,7 +460,7 @@ function Home() {
     setDateDetail(item.date);
   };
   const handleEditDetailCancel = () => {
-    setEditDetailId(null);
+    setEditDetailId('');
   };
   const editDetail = async (e) => {
     e.preventDefault();
@@ -308,421 +470,430 @@ function Home() {
       date: dateDetail,
     });
     handleEditDetailCancel();
+    getCost();
   };
 
+  const deleteDetail = async (id) => {
+    const response = await axios.delete(`http://localhost:406/cost/${id}`);
+    getCost();
+  };
+
+  const [newDetail, setNewDetail] = useState('');
+  const [newPrice, setNewPrice] = useState('');
+  const [newDateDetail, setNewDateDetail] = useState('');
+
+  const addDetail = async (e) => {
+    e.preventDefault();
+    await axios.post('http://localhost:406/cost', {
+      detail: newDetail,
+      price: newPrice,
+      date: newDateDetail,
+    });
+    getCost();
+    handleClickSaveDetail();
+  };
+  const [handleClickAddDetailValue, setHandleClickAddDetailValue] =
+    useState('');
+  const handleClickAddDetail = () => {
+    setHandleClickAddDetailValue('active');
+  };
+  const handleClickSaveDetail = () => {
+    setHandleClickAddDetailValue('');
+  };
   return (
-    <div className="overflow">
-      {/* NAVBAR */}
-      <nav className="navbar is-transparent nav-height">
-        <div className="container is-max-widescreen">
-          <div className="navbar-brand">
-            <a className="navbar-item brand-text">
-              <strong className="is-size-4 navMenuFont has-text-primary">
-                MiningStats
-              </strong>
-            </a>
-            <div
-              ref={ref}
-              onClick={changeActive}
-              className={`burger navbar-burger ${active}`}
-              data-target="navMenu"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          <div className={`navbar-menu ${active}`} id="navMenu">
-            <div className="navbar-start">
-              <a href="#" className="navbar-item has-text-grey-light">
-                Add Income
-              </a>
-              <a href="#" className="navbar-item has-text-grey-light">
-                Add Cost
-              </a>
-              <a href="#" className="navbar-item has-text-grey-light"></a>
-            </div>
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <div className="buttons">
-                  <a className="has-text-grey-light">
-                    <FontAwesomeIcon icon={faPowerOff} />
-                    <strong> Log Out</strong>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Body */}
-      <div className="container is-max-widescreen px-1">
-        {/* Header */}
-        <section className="hero is-small">
-          <div className="hero-body px-2">
-            <h1 className="title is-size-1 has-text-primary">
-              Profit This Month
-            </h1>
-          </div>
-        </section>
-        {/* Body */}
-        <div className="columns">
-          <div className="column is-7">
-            {/* Overview */}
-            <div className="columns">
-              <div className="column">
-                <section className="hero is-medium round-corner has-background-white overview">
-                  <div className="hero-body py-4 px-5 ">
-                    <ul className="is-flex">
-                      <li>
-                        <h1 className="title has-text-primary">Overview</h1>
-                      </li>
-                      <li className="mr-1 ml-auto">
-                        {/* Dropdown */}
-                        <div className="dropdown is-hoverable">
-                          <div className="dropdown-trigger">
-                            <button
-                              className="button mb-2 has-text-grey-primary"
-                              aria-haspopup="true"
-                              aria-controls="dropdown-menu"
-                            >
-                              <span className="is-size-7">Select Month</span>
-                              <span className="icon is-small">
-                                <FontAwesomeIcon icon={faAngleDown} />
-                              </span>
-                            </button>
-                          </div>
-                          <div
-                            className="dropdown-menu"
-                            id="dropdown-menu"
-                            role="menu"
+    <div>
+      <Header />
+      <div className="columns">
+        <div className="column is-7">
+          {/* Overview */}
+          <div className="columns">
+            <div className="column">
+              <section className="hero is-medium round-corner has-background-white overview">
+                <div className="hero-body py-4 px-5 ">
+                  <ul className="is-flex">
+                    <li>
+                      <h1 className="title has-text-primary">Overview</h1>
+                    </li>
+                    <li className="mr-1 ml-auto">
+                      {/* Dropdown */}
+                      <div className="dropdown is-hoverable">
+                        <div className="dropdown-trigger">
+                          <button
+                            className="button mb-2 has-text-grey-primary"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
                           >
-                            <div className="dropdown-content">
-                              <section>
-                                {income.map((income) => (
-                                  <div key={income.id}>
-                                    <a
-                                      href="#"
-                                      className="dropdown-item"
-                                      onClick={() => getIncomeById(income.id)}
-                                    >
-                                      {getDateGG(income.date)}
-                                    </a>
-                                  </div>
-                                ))}
-                              </section>
-                            </div>
-                          </div>
+                            <span className="is-size-7">Select Month</span>
+                            <span className="icon is-small">
+                              <FontAwesomeIcon icon={faAngleDown} />
+                            </span>
+                          </button>
                         </div>
-                      </li>
-                    </ul>
-
-                    <section className="hero round-corner has-background-light mb-4">
-                      <div className="hero-body py-4 px-5">
-                        <div className="columns">
-                          <div className="column is-6">
-                            <section className="hero round-corner has-background-white">
-                              {filterResults == '' ? (
-                                filteredData.map((item) => {
-                                  return (
-                                    <div
-                                      className="hero-body px-4 py-5"
-                                      key={item.id}
-                                    >
-                                      <ul className="is-flex">
-                                        <li>
-                                          <h1 className="is-size-6 has-text-primary">
-                                            {getDateGG(item.date)}
-                                          </h1>
-                                        </li>
-                                        <li className="mr-1 ml-auto">
-                                          <div className="box-percentage is-size-7">
-                                            <FontAwesomeIcon icon={faArrowUp} />
-                                            {pp(
-                                              item.value -
-                                                item.fee -
-                                                filteredPrevMonth.map((n) => {
-                                                  return n.value - n.fee;
-                                                }) /
-                                                  (item.value - item.fee)
-                                            )}
-                                            %
-                                          </div>
-                                        </li>
-                                      </ul>
-                                      <h1 className="title is-size-2 has-text-primary my-2">
-                                        {item.value - item.fee}
-                                      </h1>
-                                      <h1 className="title is-size-5 has-text-primary">
-                                        ETH
-                                      </h1>
-                                    </div>
-                                  );
-                                })
-                              ) : (
-                                <IncomeThisMonth
-                                  value={value}
-                                  fee={fee}
-                                  date={date}
-                                  pp={pp}
-                                  filteredPrevMonth={filteredPrevMonth}
-                                  getDateGG={getDateGG}
-                                  FontAwesomeIcon={FontAwesomeIcon}
-                                  faArrowUp={faArrowUp}
-                                />
-                              )}
-                            </section>
-                          </div>
-                          <div className="column is-6">
-                            <section className="hero cost round-corner">
-                              <div className="hero-body px-4 py-5">
-                                <ul className="is-flex">
-                                  <li>
-                                    <h1 className="is-size-6 has-text-primary">
-                                      {filterResults == ''
-                                        ? getDateGG(
-                                            filteredData.map(
-                                              (item) => item.date
-                                            )
-                                          )
-                                        : getDateGG(date)}{' '}
-                                      Cost
-                                    </h1>
-                                  </li>
-                                  <li className="mr-1 ml-auto">
-                                    <div className="box-percentage is-size-7">
-                                      7.5%
-                                    </div>
-                                  </li>
-                                </ul>
-                                <h1 className="title is-size-2 has-text-primary my-2">
-                                  {filterResults == ''
-                                    ? sumCostThisMonth
-                                    : sumCostBySelectedMonth}
-                                </h1>
-                                <h1 className="title is-size-5 has-text-primary">
-                                  ETH
-                                </h1>
-                              </div>
+                        <div
+                          className="dropdown-menu"
+                          id="dropdown-menu"
+                          role="menu"
+                        >
+                          <div className="dropdown-content">
+                            <section>
+                              {monthToSelect.map((item) => (
+                                <div>
+                                  <a
+                                    href="#"
+                                    className="dropdown-item"
+                                    onClick={() => getIncomeByMonth(item.date)}
+                                  >
+                                    {item.text}
+                                  </a>
+                                </div>
+                              ))}
                             </section>
                           </div>
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </section>
-              </div>
-            </div>
-            {/* Next-Prev */}
-            <div className="columns">
-              <div className="column is-5">
-                <section className="hero round-corner has-background-white next-prev">
-                  {filterResults == ''
-                    ? filteredPrevMonth.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(item.date)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              {item.value - item.fee}
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })
-                    : incomePrevMonth == ''
-                    ? wer.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(prevN)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              0
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })
-                    : incomePrevMonth.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(item.date)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              {item.value - item.fee}
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })}
-                </section>
-              </div>
-              <div className="column is-2">
-                <section className="hero next-prev">
-                  <div className="hero-body py-4 px-5">
-                    <ul className="arrow has-text-primary">
-                      <li>
-                        <FontAwesomeIcon
-                          className="is-size-4"
-                          icon={faArrowLeft}
-                        />
-                      </li>
-                      <li>Next</li>
-                      <li>
-                        <FontAwesomeIcon
-                          className="is-size-4"
-                          icon={faArrowRight}
-                        />
-                      </li>
-                      <li>Prev</li>
-                    </ul>
-                  </div>
-                </section>
-              </div>
-              <div className="column is-5">
-                <section className="hero round-corner has-background-white next-prev">
-                  {filterResults == '' && filteredNextMonth == ''
-                    ? defaultd.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(defMonth)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              {item.value - item.fee}
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })
-                    : filterResults == ''
-                    ? filteredNextMonth.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(item.date)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              {item.value - item.fee}
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })
-                    : incomeNextMonth == ''
-                    ? wer.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(prevNn)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              0
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })
-                    : incomeNextMonth.map((item) => {
-                        return (
-                          <div className="hero-body py-4 px-5" key={item.id}>
-                            <ul className="is-flex">
-                              <li>
-                                <h1 className="is-size-6 has-text-primary">
-                                  {getDateGG(item.date)}
-                                </h1>
-                              </li>
-                            </ul>
-                            <h1 className="title is-size-3 has-text-primary my-2">
-                              {item.value - item.fee}
-                            </h1>
-                            <h1 className="title is-size-6 has-text-primary">
-                              ETH
-                            </h1>
-                          </div>
-                        );
-                      })}
-                </section>
-              </div>
+                    </li>
+                  </ul>
+
+                  <section className="hero round-corner has-background-light mb-4">
+                    <div className="hero-body py-4 px-5">
+                      <div className="columns">
+                        <div className="column is-6">
+                          <section className="hero round-corner has-background-white shadow">
+                            {filterResults == '' ? (
+                              filteredData.map((item) => {
+                                return (
+                                  <div
+                                    className="hero-body px-4 py-5"
+                                    key={item.id}
+                                  >
+                                    <ul className="is-flex">
+                                      <li>
+                                        <h1 className="is-size-6 has-text-primary">
+                                          {getDateGG(item.date)}
+                                        </h1>
+                                      </li>
+                                      <li className="mr-1 ml-auto">
+                                        <div className="box-percentage is-size-7">
+                                          <FontAwesomeIcon icon={faArrowUp} />
+                                          {pp(
+                                            item.value -
+                                              item.fee -
+                                              filteredPrevMonth.map((n) => {
+                                                return n.value - n.fee;
+                                              }) /
+                                                (item.value - item.fee)
+                                          )}
+                                          %
+                                        </div>
+                                      </li>
+                                    </ul>
+                                    <h1 className="title is-size-2 has-text-primary my-2">
+                                      {item.value - item.fee}
+                                    </h1>
+                                    <h1 className="title is-size-5 has-text-primary">
+                                      ETH
+                                    </h1>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <IncomeThisMonth
+                                sumIncomeBySelectedMonth={
+                                  sumIncomeBySelectedMonth
+                                }
+                                date={date}
+                                pp={pp}
+                                filteredPrevMonth={filteredPrevMonth}
+                                getDateGG={getDateGG}
+                                FontAwesomeIcon={FontAwesomeIcon}
+                                faArrowUp={faArrowUp}
+                              />
+                            )}
+                          </section>
+                        </div>
+                        <div className="column is-6">
+                          <section className="hero cost round-corner">
+                            <div className="hero-body px-4 py-5">
+                              <ul className="is-flex">
+                                <li>
+                                  <h1 className="is-size-6 has-text-primary">
+                                    {filterResults == ''
+                                      ? getDateGG(
+                                          filteredData.map((item) => item.date)
+                                        )
+                                      : getDateGG(date)}{' '}
+                                    Cost
+                                  </h1>
+                                </li>
+                              </ul>
+                              <h1 className="title is-size-2 has-text-primary my-2">
+                                {filterResults == ''
+                                  ? sumCostThisMonth.toString().substring(0, 8)
+                                  : sumCostBySelectedMonth
+                                      .toString()
+                                      .substring(0, 8)}
+                              </h1>
+                              <h1 className="title is-size-5 has-text-primary">
+                                ETH
+                              </h1>
+                            </div>
+                          </section>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </section>
             </div>
           </div>
-          <div className="column is-5">
-            {/* Statistics */}
-            <div className="columns">
-              <div className="column">
-                <section className="hero round-corner has-background-white is-medium statistics">
+          {/* Next-Prev */}
+          <div className="columns">
+            <div className="column is-5">
+              <section className="hero round-corner has-background-white next-prev">
+                {filterResults == '' ? (
                   <div className="hero-body py-4 px-5">
-                    <h1 className="title has-text-primary">Statistics</h1>
-                    <div className="bar-chart">
-                      <BarChart
-                        chartData={data}
-                        chartOption={{
-                          title: {
-                            display: true,
-                            text: 'gg',
-                          },
-                        }}
-                      />
-                    </div>
+                    <ul className="is-flex">
+                      <li>
+                        <h1 className="is-size-6 has-text-primary">
+                          {getDateGG(prevMonthF)}
+                        </h1>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      {sumFilteredPrevMonth}
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
-                </section>
-              </div>
-            </div>
-            {/* Detail */}
-            <div className="columns">
-              <div className="column is-12">
-                <section className="hero detail-cost round-corner has-background-white">
+                ) : incomePrevMonth == '' ? (
+                  wer.map((item) => {
+                    return (
+                      <div className="hero-body py-4 px-5" key={item.id}>
+                        <ul className="is-flex">
+                          <li>
+                            <h1 className="is-size-6 has-text-primary">
+                              {getDateGG(prevN)}
+                            </h1>
+                          </li>
+                        </ul>
+                        <h1 className="title is-size-3 has-text-primary my-2">
+                          0
+                        </h1>
+                        <h1 className="title is-size-6 has-text-primary">
+                          ETH
+                        </h1>
+                      </div>
+                    );
+                  })
+                ) : (
                   <div className="hero-body py-4 px-5">
-                    <div className="title-underline is-flex">
-                      <h1 className="has-text-primary ">Detail Cost</h1>
-                    </div>
-                    <div className="box-table">
-                      <form onSubmit={editDetail}>
-                        <table className="table has-text-primary is-size-7 is-fullwidth is-hoverable">
-                          <tbody>
-                            {cost.map((item, index) => {
+                    <ul className="is-flex">
+                      <li>
+                        <h1 className="is-size-6 has-text-primary">
+                          {getDateGG(prevMonthI)}
+                        </h1>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      {sumIncomePrevMonth}
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
+                  </div>
+                )}
+              </section>
+            </div>
+            <div className="column is-2">
+              <section className="hero next-prev">
+                <div className="hero-body py-4 px-5">
+                  <ul className="arrow has-text-primary">
+                    <li>
+                      <FontAwesomeIcon
+                        className="is-size-4"
+                        icon={faArrowLeft}
+                      />
+                    </li>
+                    <li>Next</li>
+                    <li>
+                      <FontAwesomeIcon
+                        className="is-size-4"
+                        icon={faArrowRight}
+                      />
+                    </li>
+                    <li>Prev</li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+            <div className="column is-5">
+              <section className="hero round-corner has-background-white next-prev">
+                {filterResults == '' && filteredNextMonth == '' ? (
+                  defaultd.map((item) => {
+                    return (
+                      <div className="hero-body py-4 px-5" key={item.id}>
+                        <ul className="is-flex">
+                          <li>
+                            <h1 className="is-size-6 has-text-primary">
+                              {getDateGG(defMonth)}
+                            </h1>
+                          </li>
+                        </ul>
+                        <h1 className="title is-size-3 has-text-primary my-2">
+                          {item.value - item.fee}
+                        </h1>
+                        <h1 className="title is-size-6 has-text-primary">
+                          ETH
+                        </h1>
+                      </div>
+                    );
+                  })
+                ) : filterResults == '' ? (
+                  <div className="hero-body py-4 px-5">
+                    <ul className="is-flex">
+                      <li>
+                        <h1 className="is-size-6 has-text-primary">
+                          {getDateGG(nextMonthF)}
+                        </h1>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      {sumFilteredNextMonth}
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
+                  </div>
+                ) : incomeNextMonth == '' ? (
+                  wer.map((item) => {
+                    return (
+                      <div className="hero-body py-4 px-5" key={item.id}>
+                        <ul className="is-flex">
+                          <li>
+                            <h1 className="is-size-6 has-text-primary">
+                              {getDateGG(prevNn)}
+                            </h1>
+                          </li>
+                        </ul>
+                        <h1 className="title is-size-3 has-text-primary my-2">
+                          0
+                        </h1>
+                        <h1 className="title is-size-6 has-text-primary">
+                          ETH
+                        </h1>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="hero-body py-4 px-5">
+                    <ul className="is-flex">
+                      <li>
+                        <h1 className="is-size-6 has-text-primary">
+                          {getDateGG(nextMonthI)}
+                        </h1>
+                      </li>
+                    </ul>
+                    <h1 className="title is-size-3 has-text-primary my-2">
+                      {sumIncomeNextMonth}
+                    </h1>
+                    <h1 className="title is-size-6 has-text-primary">ETH</h1>
+                  </div>
+                )}
+              </section>
+            </div>
+          </div>
+        </div>
+        <div className="column is-5">
+          {/* Statistics */}
+          <div className="columns">
+            <div className="column">
+              <section className="hero round-corner has-background-white is-medium statistics">
+                <div className="hero-body py-4 px-5">
+                  <h1 className="title has-text-primary">Statistics</h1>
+                  <div className="bar-chart">
+                    <BarChart
+                      chartData={data}
+                      chartOption={{
+                        title: {
+                          display: true,
+                          text: 'gg',
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+          {/* Detail */}
+          <div className="columns">
+            <div className="column is-12">
+              <section className="hero detail-cost round-corner has-background-white">
+                <div className="hero-body py-4 px-5">
+                  <div className="title-underline is-flex">
+                    <h1 className="has-text-primary ">Detail Cost</h1>
+                    <FontAwesomeIcon
+                      className="my-auto mr-1 ml-auto has-text-primary is-clickable"
+                      icon={faPlus}
+                      onClick={handleClickAddDetail}
+                    />
+                  </div>
+                  <div className="box-table">
+                    {/* testetste */}
+                    <form
+                      onSubmit={
+                        editDetailId == '' &&
+                        handleClickAddDetailValue == 'active'
+                          ? addDetail
+                          : editDetail
+                      }
+                    >
+                      <table className="table has-text-primary is-size-7 is-fullwidth is-hoverable">
+                        <tbody>
+                          {handleClickAddDetailValue == 'active' ? (
+                            <tr>
+                              {/* <th className="is-borderless">{index + 1}</th> */}
+                              <td className="is-borderless">
+                                <input
+                                  className="input is-small"
+                                  type="text"
+                                  required="required"
+                                  name="detail"
+                                  placeholder="Detail"
+                                  value={newDetail}
+                                  onChange={(e) => setNewDetail(e.target.value)}
+                                ></input>
+                              </td>
+                              <td className="is-borderless">
+                                <input
+                                  className="input is-small"
+                                  type="number"
+                                  step="0.01"
+                                  placeholder="Price"
+                                  name="price"
+                                  value={newPrice}
+                                  onChange={(e) => setNewPrice(e.target.value)}
+                                ></input>
+                              </td>
+                              <td className="is-borderless">
+                                <input
+                                  className="input is-small "
+                                  type="date"
+                                  name="date"
+                                  value={newDateDetail}
+                                  onChange={(e) =>
+                                    setNewDateDetail(e.target.value)
+                                  }
+                                ></input>
+                              </td>
+                              <td>
+                                <button
+                                  type="submit"
+                                  className="button is-small"
+                                >
+                                  Save
+                                </button>
+                              </td>
+                            </tr>
+                          ) : filterResults == '' ? (
+                            costThisMonth.map((item, index) => {
                               return (
-                                <Fragment>
+                                <Fragment key={item.id}>
                                   {editDetailId === item.id ? (
                                     <EditableRow
                                       item={item}
@@ -746,19 +917,65 @@ function Home() {
                                       }
                                       faPenToSquare={faPenToSquare}
                                       faTrashCan={faTrashCan}
+                                      deleteDetail={deleteDetail}
+                                      editDetail={editDetail}
                                     />
                                   )}
                                 </Fragment>
                               );
-                            })}
-                          </tbody>
-                        </table>
-                      </form>
-                    </div>
+                            })
+                          ) : (
+                            costBySelectedMonth.map((item, index) => {
+                              return (
+                                <Fragment key={item.id}>
+                                  {editDetailId === item.id ? (
+                                    <EditableRow
+                                      item={item}
+                                      index={index}
+                                      detail={detail}
+                                      price={price}
+                                      dateDetail={dateDetail}
+                                      setDetail={setDetail}
+                                      setPrice={setPrice}
+                                      setDateDetail={setDateDetail}
+                                      handleEditDetailCancel={
+                                        handleEditDetailCancel
+                                      }
+                                    />
+                                  ) : (
+                                    <ReadOnlyRow
+                                      item={item}
+                                      index={index}
+                                      handleEditDetailClick={
+                                        handleEditDetailClick
+                                      }
+                                      faPenToSquare={faPenToSquare}
+                                      faTrashCan={faTrashCan}
+                                      deleteDetail={deleteDetail}
+                                      editDetail={editDetail}
+                                    />
+                                  )}
+                                </Fragment>
+                              );
+                            })
+                          )}
+                          {/* <AddDetail
+                              newDetail={newDetail}
+                              newPrice={newPrice}
+                              newDateDetail={newDateDetail}
+                              setNewDetail={setNewDetail}
+                              setNewPrice={setNewPrice}
+                              setNewDateDetail={setNewDateDetail}
+                            /> */}
+                        </tbody>
+                      </table>
+                    </form>
+                    {/* testes */}
                   </div>
-                </section>
-              </div>
-              {/* <div className="column is-5">
+                </div>
+              </section>
+            </div>
+            {/* <div className="column is-5">
                 <section className="hero round-corner has-background-white about">
                   <div className="hero-body py-4 px-5">
                     <h1 className="has-text-primary title-underline">About</h1>
@@ -776,12 +993,11 @@ function Home() {
                   </div>
                 </section>
               </div> */}
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Home;
