@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  miningstats:
+    container_name: 'miningstats'
+    build: .
+    networks:
+      - miningstats-network
+    volumes:
+      - .:/miningstats
+    ports:
+      - 3000:3000
+    stdin_open: true
+    environment:
+      - PORT=3000
+    command: npm start
+networks:
+  miningstats-network:

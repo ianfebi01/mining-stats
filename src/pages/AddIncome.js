@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import BackendUrl from '../components/Backend';
 
 const AddIncome = () => {
   const [value, setValue] = useState('');
@@ -10,7 +11,7 @@ const AddIncome = () => {
 
   const addIncome = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:406/income', {
+    await axios.post(`${BackendUrl}/income`, {
       value: value,
       fee: fee,
       date: date,

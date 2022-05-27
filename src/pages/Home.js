@@ -1,5 +1,5 @@
 import '../assets/style/main.scss';
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUp,
@@ -16,8 +16,10 @@ import axios from 'axios';
 import { getDateGG } from '../components/homeComponents/date';
 import ReadOnlyRow from '../components/homeComponents/ReadOnlyRow.js';
 import EditableRow from '../components/homeComponents/EditableRow';
-import IncomeThisMonth from '../components/homeComponents/IncomeThisMonth';
+import IncomeBySelectedMonth from '../components/homeComponents/IncomeBySelectedMonth';
 import Header from '../components/homeComponents/Header';
+import { pp } from '../components/homeComponents/pp';
+import BackendUrl from '../components/Backend';
 
 const Home = () => {
   // Data
@@ -41,7 +43,7 @@ const Home = () => {
   }, []);
 
   const getIncomes = async () => {
-    const response = await axios.get('http://localhost:406/income');
+    const response = await axios.get(`${BackendUrl}/income`);
     setIncome(response.data);
   };
 
@@ -127,42 +129,24 @@ const Home = () => {
     item.date.includes(nextMonthI)
   );
 
-  const sumIncomeThisMonth =
-    filteredData
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    filteredData.map((item) => item.fee).reduce((acc, item) => item + acc, 0);
+  const sumIncomeThisMonth = filteredData
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
 
-  const sumFilteredPrevMonth =
-    filteredPrevMonth
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    filteredPrevMonth
-      .map((item) => item.fee)
-      .reduce((acc, item) => item + acc, 0);
-  const sumIncomePrevMonth =
-    incomePrevMonth
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    incomePrevMonth
-      .map((item) => item.fee)
-      .reduce((acc, item) => item + acc, 0);
+  const sumFilteredPrevMonth = filteredPrevMonth
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
+  const sumIncomePrevMonth = incomePrevMonth
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
 
-  const sumFilteredNextMonth =
-    filteredNextMonth
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    filteredNextMonth
-      .map((item) => item.fee)
-      .reduce((acc, item) => item + acc, 0);
+  const sumFilteredNextMonth = filteredNextMonth
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
 
-  const sumIncomeNextMonth =
-    incomeNextMonth
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    incomeNextMonth
-      .map((item) => item.fee)
-      .reduce((acc, item) => item + acc, 0);
+  const sumIncomeNextMonth = incomeNextMonth
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
 
   const monthByDate = new Date(date);
   const monthSelected = () => {
@@ -178,182 +162,108 @@ const Home = () => {
   const incomeBySelectedMonth = income.filter((item) =>
     item.date.includes(selectedMonth)
   );
-  const sumIncomeBySelectedMonth =
-    incomeBySelectedMonth
-      .map((item) => item.value)
-      .reduce((acc, item) => item + acc, 0) -
-    incomeBySelectedMonth
-      .map((item) => item.fee)
-      .reduce((acc, item) => item + acc, 0);
+  const sumIncomeBySelectedMonth = incomeBySelectedMonth
+    .map((item) => item.value)
+    .reduce((acc, item) => item + acc, 0);
 
   const monthToSelect = [
     {
       text: 'January',
       date: '2022-01',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-01'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-01'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-01'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'February',
       date: '2022-02',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-02'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-02'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-02'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'March',
       date: '2022-03',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-03'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-03'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-03'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'April',
       date: '2022-04',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-04'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-04'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-04'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'May',
       date: '2022-05',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-05'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-05'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-05'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'June',
       date: '2022-06',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-06'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-06'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-06'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'July',
       date: '2022-07',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-07'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-07'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-07'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'August',
       date: '2022-08',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-08'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-08'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-08'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'September',
       date: '2022-09',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-09'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-09'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-09'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'October',
       date: '2022-10',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-10'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-10'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-10'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'November',
       date: '2022-11',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-11'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-11'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-11'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
     {
       text: 'December',
       date: '2022-12',
-      income:
-        income
-          .filter((item) => item.date.includes('2022-12'))
-          .map((item) => item.value)
-          .reduce((acc, item) => item + acc, 0) -
-        income
-          .filter((item) => item.date.includes('2022-12'))
-          .map((item) => item.fee)
-          .reduce((acc, item) => item + acc, 0),
+      income: income
+        .filter((item) => item.date.includes('2022-12'))
+        .map((item) => item.value)
+        .reduce((acc, item) => item + acc, 0),
     },
   ];
-  console.log(monthToSelect);
-
-  const getIncomeById = async (id) => {
-    const response = await axios.get(`http://localhost:406/income/${id}`);
-    setFilterResults('gg');
-    setJoh(response.data);
-    setValue(response.data.value);
-    setFee(response.data.fee);
-    setDate(response.data.date);
-  };
 
   const getIncomeByMonth = (x) => {
     setDate(x);
@@ -365,13 +275,13 @@ const Home = () => {
   const defaultd = [{ value: 0, fee: 0, date: jembut }];
   const [filterCost, setFilterCost] = useState('');
 
-  const pp = (a) => {
-    return a.toString().substring(0, 5);
-  };
+  // const pp = (a) => {
+  //   return a.toString().substring(0, 5);
+  // };
 
   // Cost
   const getCost = async () => {
-    const response = await axios.get('http://localhost:406/cost');
+    const response = await axios.get(`${BackendUrl}/cost`);
     setCost(response.data);
   };
 
@@ -412,7 +322,7 @@ const Home = () => {
   });
   useEffect(() => {
     const fetchData = async () => {
-      const url = 'http://localhost:406/income';
+      const url = `${BackendUrl}/income`;
       const labelSet = [];
       const dataSet1 = [];
 
@@ -422,9 +332,8 @@ const Home = () => {
           return res;
         })
         .then((res) => {
-          console.log('ressss', res);
           for (const val of res) {
-            dataSet1.push(val.value - val.fee);
+            dataSet1.push(val.value);
 
             labelSet.push(getDateGG(val.date));
           }
@@ -464,7 +373,7 @@ const Home = () => {
   };
   const editDetail = async (e) => {
     e.preventDefault();
-    await axios.patch(`http://localhost:406/cost/${idDetail}`, {
+    await axios.patch(`${BackendUrl}/cost/${idDetail}`, {
       detail: detail,
       price: price,
       date: dateDetail,
@@ -474,7 +383,7 @@ const Home = () => {
   };
 
   const deleteDetail = async (id) => {
-    const response = await axios.delete(`http://localhost:406/cost/${id}`);
+    const response = await axios.delete(`${BackendUrl}/cost/${id}`);
     getCost();
   };
 
@@ -484,7 +393,7 @@ const Home = () => {
 
   const addDetail = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:406/cost', {
+    await axios.post(`${BackendUrl}/cost`, {
       detail: newDetail,
       price: newPrice,
       date: newDateDetail,
@@ -553,51 +462,38 @@ const Home = () => {
                       </div>
                     </li>
                   </ul>
-
+                  {/* Income */}
                   <section className="hero round-corner has-background-light mb-4">
                     <div className="hero-body py-4 px-5">
                       <div className="columns">
                         <div className="column is-6">
                           <section className="hero round-corner has-background-white shadow">
                             {filterResults == '' ? (
-                              filteredData.map((item) => {
-                                return (
-                                  <div
-                                    className="hero-body px-4 py-5"
-                                    key={item.id}
-                                  >
-                                    <ul className="is-flex">
-                                      <li>
-                                        <h1 className="is-size-6 has-text-primary">
-                                          {getDateGG(item.date)}
-                                        </h1>
-                                      </li>
-                                      <li className="mr-1 ml-auto">
-                                        <div className="box-percentage is-size-7">
-                                          <FontAwesomeIcon icon={faArrowUp} />
-                                          {pp(
-                                            item.value -
-                                              item.fee -
-                                              filteredPrevMonth.map((n) => {
-                                                return n.value - n.fee;
-                                              }) /
-                                                (item.value - item.fee)
-                                          )}
-                                          %
-                                        </div>
-                                      </li>
-                                    </ul>
-                                    <h1 className="title is-size-2 has-text-primary my-2">
-                                      {item.value - item.fee}
+                              <div className="hero-body px-4 py-5">
+                                <ul className="is-flex">
+                                  <li>
+                                    <h1 className="is-size-6 has-text-primary">
+                                      {getDateGG(thisMonth)}
                                     </h1>
-                                    <h1 className="title is-size-5 has-text-primary">
-                                      ETH
-                                    </h1>
-                                  </div>
-                                );
-                              })
+                                  </li>
+                                  <li className="mr-1 ml-auto">
+                                    <div className="box-percentage is-size-7">
+                                      <FontAwesomeIcon icon={faArrowUp} />
+                                      {pp(sumIncomeThisMonth)}%
+                                    </div>
+                                  </li>
+                                </ul>
+                                <h1 className="title is-size-2 has-text-primary my-2">
+                                  {sumIncomeThisMonth
+                                    .toString()
+                                    .substring(0, 8)}
+                                </h1>
+                                <h1 className="title is-size-5 has-text-primary">
+                                  ETH
+                                </h1>
+                              </div>
                             ) : (
-                              <IncomeThisMonth
+                              <IncomeBySelectedMonth
                                 sumIncomeBySelectedMonth={
                                   sumIncomeBySelectedMonth
                                 }
@@ -660,7 +556,7 @@ const Home = () => {
                       </li>
                     </ul>
                     <h1 className="title is-size-3 has-text-primary my-2">
-                      {sumFilteredPrevMonth}
+                      {sumFilteredPrevMonth.toString().substring(0, 8)}
                     </h1>
                     <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
@@ -694,7 +590,7 @@ const Home = () => {
                       </li>
                     </ul>
                     <h1 className="title is-size-3 has-text-primary my-2">
-                      {sumIncomePrevMonth}
+                      {sumIncomePrevMonth.toString().substring(0, 8)}
                     </h1>
                     <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
@@ -711,14 +607,14 @@ const Home = () => {
                         icon={faArrowLeft}
                       />
                     </li>
-                    <li>Next</li>
+                    <li>Prev</li>
                     <li>
                       <FontAwesomeIcon
                         className="is-size-4"
                         icon={faArrowRight}
                       />
                     </li>
-                    <li>Prev</li>
+                    <li>Next</li>
                   </ul>
                 </div>
               </section>
@@ -737,7 +633,7 @@ const Home = () => {
                           </li>
                         </ul>
                         <h1 className="title is-size-3 has-text-primary my-2">
-                          {item.value - item.fee}
+                          {item.value}
                         </h1>
                         <h1 className="title is-size-6 has-text-primary">
                           ETH
@@ -755,7 +651,7 @@ const Home = () => {
                       </li>
                     </ul>
                     <h1 className="title is-size-3 has-text-primary my-2">
-                      {sumFilteredNextMonth}
+                      {sumFilteredNextMonth.toString().substring(0, 8)}
                     </h1>
                     <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
@@ -789,7 +685,7 @@ const Home = () => {
                       </li>
                     </ul>
                     <h1 className="title is-size-3 has-text-primary my-2">
-                      {sumIncomeNextMonth}
+                      {sumIncomeNextMonth.toString().substring(0, 8)}
                     </h1>
                     <h1 className="title is-size-6 has-text-primary">ETH</h1>
                   </div>
@@ -959,40 +855,13 @@ const Home = () => {
                               );
                             })
                           )}
-                          {/* <AddDetail
-                              newDetail={newDetail}
-                              newPrice={newPrice}
-                              newDateDetail={newDateDetail}
-                              setNewDetail={setNewDetail}
-                              setNewPrice={setNewPrice}
-                              setNewDateDetail={setNewDateDetail}
-                            /> */}
                         </tbody>
                       </table>
                     </form>
-                    {/* testes */}
                   </div>
                 </div>
               </section>
             </div>
-            {/* <div className="column is-5">
-                <section className="hero round-corner has-background-white about">
-                  <div className="hero-body py-4 px-5">
-                    <h1 className="has-text-primary title-underline">About</h1>
-                    <div className="box-about">
-                      <p className="has-text-primary is-size-7">
-                        Design by ianfebi01, follow me for more design.
-                      </p>
-                      <ul>
-                        <li className="has-text-primary is-size-7 email">
-                          <FontAwesomeIcon icon={faEnvelope} />
-                          <p className="email-text">ianfebi01@gmail.com</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              </div> */}
           </div>
         </div>
       </div>

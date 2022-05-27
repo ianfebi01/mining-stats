@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import BackendUrl from '../components/Backend';
 
 const AddCost = () => {
   const [detail, setDetail] = useState('');
@@ -11,7 +12,7 @@ const AddCost = () => {
 
   const addCost = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:406/cost', {
+    await axios.post(`${BackendUrl}/cost`, {
       detail: detail,
       price: price,
       date: dateDetail,

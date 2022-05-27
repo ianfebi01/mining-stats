@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useOutsideClick from './useOutsideClick';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   // Burger
@@ -28,32 +28,55 @@ const Navbar = () => {
   const [navActiveAddCost, setNavActiveAddCost] = useState(
     'has-text-grey-primary'
   );
+  const [navActiveIncomeList, setNavActiveIncomeList] = useState(
+    'has-text-grey-primary'
+  );
 
   const handleClickMiningStats = () => {
     setNavActiveAddCost('has-text-grey-primary');
+    setNavActiveIncomeList('has-text-grey-primary');
     setNavActiveAddIncome('has-text-grey-primary');
   };
   const handleClickAddIncome = () => {
     setNavActiveAddCost('has-text-grey-primary');
+    setNavActiveIncomeList('has-text-grey-primary');
     setNavActiveAddIncome('has-text-primary');
   };
   const handleClickAddCost = () => {
     setNavActiveAddIncome('has-text-grey-primary');
+    setNavActiveIncomeList('has-text-grey-primary');
     setNavActiveAddCost('has-text-primary');
   };
-  console.log('income : ', navActiveAddIncome);
-  console.log('cost : ', navActiveAddCost);
+
+  const handleClickIncomeList = () => {
+    setNavActiveAddIncome('has-text-grey-primary');
+    setNavActiveAddCost('has-text-grey-primary');
+    setNavActiveIncomeList('has-text-primary');
+  };
+
+  const [userLogin, setUserLogin] = useState('');
+  // User Login
+  const handleUserLogin = () => {
+    localStorage.setItem('login', 'false');
+  };
+
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (userLogin == 'false') {
+  //     navigate('/');
+  //   }
+  // }, [userLogin]);
   return (
     <div>
-      <nav className="navbar is-transparent nav-height">
-        <div className="container is-max-widescreen">
-          <div className="navbar-brand">
+      <nav className='navbar is-transparent nav-height'>
+        <div className='container is-max-widescreen'>
+          <div className='navbar-brand'>
             <Link
-              to="/"
-              className="navbar-item brand-text"
+              to='/'
+              className='navbar-item brand-text'
               onClick={handleClickMiningStats}
             >
-              <strong className="is-size-4 navMenuFont has-text-primary">
+              <strong className='is-size-4 navMenuFont has-text-primary'>
                 MiningStats
               </strong>
             </Link>
@@ -61,37 +84,49 @@ const Navbar = () => {
               ref={ref}
               onClick={changeActive}
               className={`burger navbar-burger ${active}`}
-              data-target="navMenu"
+              data-target='navMenu'
             >
               <span></span>
               <span></span>
               <span></span>
             </div>
           </div>
-          <div className={`navbar-menu ${active}`} id="navMenu">
-            <div className="navbar-start">
+          <div className={`navbar-menu ${active}`} id='navMenu'>
+            <div className='navbar-start'>
               <Link
-                to="/addIncome"
+                to='/addIncome'
                 onClick={handleClickAddIncome}
                 className={`navbar-item ${navActiveAddIncome}`}
               >
                 Add Income
               </Link>
               <Link
-                to="/addCost"
+                to='/addCost'
                 onClick={handleClickAddCost}
                 className={`navbar-item ${navActiveAddCost}`}
               >
                 Add Cost
               </Link>
+              <Link
+                to='/incomeList'
+                onClick={handleClickIncomeList}
+                className={`navbar-item ${navActiveIncomeList}`}
+              >
+                Income List
+              </Link>
             </div>
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <div className="buttons">
-                  <a className="has-text-grey-light">
-                    <FontAwesomeIcon icon={faPowerOff} />
-                    <strong> Log Out</strong>
-                  </a>
+            <div className='navbar-end'>
+              <div className='navbar-item'>
+                <div className='buttons'>
+                  <form onSubmit={handleUserLogin}>
+                    <button
+                      type='submit'
+                      className='button has-text-grey-light'
+                    >
+                      <FontAwesomeIcon icon={faPowerOff} />
+                      <strong> Log Out</strong>
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>

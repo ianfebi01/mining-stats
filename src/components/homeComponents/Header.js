@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <div>
       <section className="hero is-small">
-        <div className="hero-body px-2">
+        <div className="hero-body px-2 has-text-centered">
           <h1 className="title is-size-1 has-text-primary">
             Profit This Month
           </h1>
