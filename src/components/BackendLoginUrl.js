@@ -1,3 +1,5 @@
-const BackendLoginUrl = 'http://localhost:406';
+import BackendUrl from './Backend';
+
+const BackendLoginUrl = BackendUrl;
 
 export default BackendLoginUrl;

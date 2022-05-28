@@ -60,15 +60,20 @@ const Login = () => {
   const userEmailLogin = Object.values(users).filter((item) =>
     item.email.includes(input.email)
   );
-
-  console.log('Email : ', userEmailLogin);
-  console.log('Input email : ', input.email);
-  console.log('Input password : ', input.password);
+  // const [userId, setUserId] = useState(userEmailLogin.map((item) => item.id));
+  // const getUserById = async (userId) => {
+  //   const response = await axios.get(`${BackendLoginUrl}/users/${userId}`);
+  // };
+  // console.log('Email : ', userEmailLogin);
+  // console.log('Input email : ', input.email);
+  // console.log('Input password : ', input.password);
 
   const [userLogin, setUserLogin] = useState(localStorage.getItem('login'));
+  const [loginEmail, setLoginEmail] = useState(localStorage.getItem('email'));
 
   useEffect(() => {
     localStorage.setItem('login', userLogin);
+    localStorage.setItem('email', loginEmail);
   }, [userLogin]);
 
   console.log('userLogin', userLogin);
@@ -82,7 +87,9 @@ const Login = () => {
       userEmailLogin.map((item) => item.password) == input.password
     ) {
       setUserLogin('true');
+      setLoginEmail(userEmailLogin.map((item) => item.email));
       setLoginFailed(false);
+
       console.log('Login Failed', loginFailed);
     } else {
       setLoginFailed(true);

@@ -7,6 +7,8 @@ const AddIncome = () => {
   const [value, setValue] = useState('');
   const [fee, setFee] = useState('');
   const [date, setDate] = useState('');
+  const [email, setEmail] = useState(localStorage.getItem('email'));
+
   const navigate = useNavigate();
 
   const addIncome = async (e) => {
@@ -15,6 +17,7 @@ const AddIncome = () => {
       value: value,
       fee: fee,
       date: date,
+      email: email,
     });
     navigate('/');
   };

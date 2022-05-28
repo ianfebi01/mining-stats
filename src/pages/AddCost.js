@@ -8,6 +8,7 @@ const AddCost = () => {
   const [detail, setDetail] = useState('');
   const [price, setPrice] = useState('');
   const [dateDetail, setDateDetail] = useState('');
+  const [email, setEmail] = useState(localStorage.getItem('email'));
   const navigate = useNavigate();
 
   const addCost = async (e) => {
@@ -16,6 +17,7 @@ const AddCost = () => {
       detail: detail,
       price: price,
       date: dateDetail,
+      email: email,
     });
     navigate('/');
   };

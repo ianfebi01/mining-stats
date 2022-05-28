@@ -44,12 +44,13 @@ const Home = () => {
 
   const getIncomes = async () => {
     const response = await axios.get(`${BackendUrl}/income`);
-    setIncome(response.data);
+    setIncome(response.data.filter((item) => item.email.includes(email)));
   };
 
   const [value, setValue] = useState('');
   const [fee, setFee] = useState('');
   const [date, setDate] = useState('');
+  const [email, setEmail] = useState(localStorage.getItem('email'));
 
   const current = new Date();
   const currentMonth = current.getMonth() + 1;
@@ -282,7 +283,7 @@ const Home = () => {
   // Cost
   const getCost = async () => {
     const response = await axios.get(`${BackendUrl}/cost`);
-    setCost(response.data);
+    setCost(response.data.filter((item) => item.email.includes(email)));
   };
 
   const costThisMonth = cost.filter((item) => item.date.includes(thisMonth));
@@ -302,21 +303,14 @@ const Home = () => {
   // Chart
 
   const [data, setData] = useState({
-    labels: [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ],
+    labels: 'No Data',
     datasets: [
       {
-        label: 'Dataset 1',
-        data: [],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(25, 90, 13, 0.5)',
+        label: 'Total WD',
+        data: '0',
+        backgroundColor: ['#1456C8'],
+        borderRadius: 20,
+        borderSkipped: false,
       },
     ],
   });
@@ -333,9 +327,11 @@ const Home = () => {
         })
         .then((res) => {
           for (const val of res) {
-            dataSet1.push(val.value);
-
-            labelSet.push(getDateGG(val.date));
+            {
+              val.email === email
+                ? dataSet1.push(val.value) && labelSet.push(getDateGG(val.date))
+                : labelSet.push('no data');
+            }
           }
           setData({
             labels: labelSet,
@@ -377,6 +373,7 @@ const Home = () => {
       detail: detail,
       price: price,
       date: dateDetail,
+      email: email,
     });
     handleEditDetailCancel();
     getCost();
@@ -397,6 +394,7 @@ const Home = () => {
       detail: newDetail,
       price: newPrice,
       date: newDateDetail,
+      email: email,
     });
     getCost();
     handleClickSaveDetail();
